@@ -1,0 +1,3433 @@
+/* Clarity for Complex Work — editorial site */
+
+:root {
+  /* Palette — these are the values the home page's React app sets
+     at runtime via applyPalette() from TWEAK_DEFAULTS. We mirror them
+     here so the subpages (which don't run that JS) render with the
+     same paper / ink / accent as the home page. */
+  --paper: #FAF4E6;
+  --paper-2: #EEE8DB;
+  --paper-3: #FAF4E7;
+  --ink: #171513;
+  --ink-2: #413F3D;
+  --margin: #7F7E7D;
+  --rule: #DCD7CA;
+  --accent: #5D2A2A;
+  --accent-soft: #7A5050;
+
+  /* Type — home page's runtime default is Instrument Serif via
+     applyFont(), so we use the same stack here. Body prose uses a
+     separate sans (Space Grotesk) for legibility — it's more readable
+     than the serif at body size and pairs cleanly with Instrument
+     Serif on headings. */
+  --serif: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+  --display: 'Instrument Serif', Georgia, serif;
+  --italic: 'Instrument Serif', Georgia, serif;
+  --mono: "JetBrains Mono", ui-monospace, "Courier New", monospace;
+
+  --maxw: 1280px;
+  --gutter: clamp(20px, 4vw, 56px);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 18px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  /* subtle paper grain */
+  background-image:
+    radial-gradient(1px 1px at 22% 38%, rgba(25,23,19,.025) 50%, transparent 51%),
+    radial-gradient(1px 1px at 78% 64%, rgba(25,23,19,.02) 50%, transparent 51%),
+    radial-gradient(1px 1px at 56% 12%, rgba(25,23,19,.018) 50%, transparent 51%);
+  background-size: 7px 7px, 11px 11px, 13px 13px;
+}
+
+a { color: var(--ink); text-decoration: none; }
+a:hover { color: var(--accent); }
+
+img { max-width: 100%; display: block; }
+
+.container {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding-inline: var(--gutter);
+}
+
+/* ─── NAV / MASTHEAD BAR ─── */
+.nav {
+  border-bottom: 1px solid var(--ink);
+  padding: 14px 0 10px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.nav-inner {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+}
+.nav-mark {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 16px;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+.nav-links a {
+  color: var(--ink);
+  font-weight: 500;
+  transition: color .15s;
+  text-decoration: none;
+  white-space: nowrap;
+  padding: 0 clamp(8px, 1.3vw, 16px);
+  position: relative;
+}
+.nav-links a:first-child { padding-left: 0; }
+.nav-links a:last-child { padding-right: 0; }
+/* Separator dot between nav items — absolutely-positioned ::before
+   on every item past the first, sitting at the item's leading edge
+   so the dot rests halfway between neighbours. Color is forced to
+   --margin so .is-current's accent color doesn't bleed into the dot. */
+.nav-links a + a::before {
+  content: "·";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translate(-50%, -55%);
+  color: var(--margin);
+  pointer-events: none;
+  font-weight: 400;
+}
+.nav-links:hover a:not(:hover) { color: var(--margin); }
+.nav-links a:hover { color: var(--accent); }
+.nav-links a.is-current { color: var(--accent); }
+.nav-mark { text-decoration: none; color: var(--ink); }
+@media (max-width: 1100px) {
+  .nav { font-size: 10px; letter-spacing: 0.06em; }
+  .nav-links a { padding: 0 8px; }
+}
+.nav-date { color: var(--margin); }
+/* Contact slot replaces the old Vol/location tag on the far right
+   of the masthead. Same mono small-caps tone as the rest of the
+   nav so it doesn't pop as a CTA — it just behaves like a nav
+   link that happens to open the user's mail client. */
+.nav-contact {
+  color: var(--ink);
+  font-weight: 500;
+  text-decoration: none;
+  transition: color .15s;
+}
+.nav-contact:hover { color: var(--accent); }
+.nav-links:hover ~ .nav-personal a { color: var(--margin); }
+
+/* Right-aligned cluster pairing About Me with Contact — the two
+   personal/transactional links sit together, separated from the
+   five practice/idea links in .nav-links by the natural flex gap.
+   Same dot-separator treatment as .nav-links for visual continuity. */
+.nav-personal {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+.nav-personal a {
+  color: var(--ink);
+  font-weight: 500;
+  padding: 0 14px;
+  text-decoration: none;
+  transition: color .15s;
+  position: relative;
+}
+.nav-personal a:last-child { padding-right: 0; }
+.nav-personal a + a::before {
+  content: "·";
+  position: absolute;
+  left: -4px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--margin);
+  font-weight: 400;
+}
+.nav-personal:hover a:not(:hover) { color: var(--margin); }
+.nav-personal a:hover { color: var(--accent); }
+
+/* Mobile menu toggle — a "Menu / Close" text button in the same mono
+   small-caps register as the nav (no hamburger icon, to stay in the
+   editorial voice). Hidden on desktop; revealed ≤800px where it
+   expands the full nav as a stacked list. (800px, not 720, because the
+   horizontal nav stops fitting below ~795px.) */
+.nav-toggle {
+  display: none;
+  background: none;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink);
+  cursor: pointer;
+}
+.nav-toggle .nav-toggle-x { display: none; }
+.nav.nav-open .nav-toggle .nav-toggle-menu { display: none; }
+.nav.nav-open .nav-toggle .nav-toggle-x { display: inline; }
+
+/* Tablet band (801–880px): the masthead stays in its full horizontal
+   layout here. The five practice links plus the mark and the right-hand
+   About/Contact cluster only just fit, so tighten the inter-cluster gap
+   and per-link padding in this band. Below 801px the horizontal nav
+   cannot fit at all (it needs ~783px), so the stacked menu engages
+   instead (see the ≤880px block below). The old 801–880 "cram" band
+   (tightened gaps/padding) was removed: at tablet widths it left
+   "Clarity for Complex Work" and "About Me" jammed against the row, so
+   the toggle now takes over for the entire ≤880 range instead. */
+@media (max-width: 880px) {
+  .nav-inner { flex-wrap: wrap; align-items: center; }
+  .nav-toggle { display: inline-flex; margin-left: auto; }
+
+  /* Collapsed by default; both clusters become full-width stacked
+     lists when the nav is open. */
+  .nav-links,
+  .nav-personal {
+    display: none;
+    flex-basis: 100%;
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+  }
+  .nav.nav-open .nav-links { display: flex; margin-top: 12px; }
+  .nav.nav-open .nav-personal { display: flex; margin-bottom: 4px; }
+  .nav.nav-open .nav-personal a:not(.nav-contact) { display: block; }
+
+  .nav-links a,
+  .nav-personal a {
+    display: block;
+    width: 100%;
+    padding: 14px 0;
+    border-top: 1px solid var(--rule);
+  }
+  .nav-links a:first-child { padding-left: 0; }
+  /* Drop the inline dot separators in stacked mode. */
+  .nav-links a + a::before,
+  .nav-personal a + a::before { display: none; }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SUBPAGE CHROME — shared by About / Complexity / vertical pages
+   These classes are prefixed sp-* to avoid collisions with the
+   home-page classes. Subpages share the .nav and .foot from
+   above, so chrome stays in lockstep with the home page.
+   ───────────────────────────────────────────────────────────── */
+body.subpage {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+}
+
+/* HERO — eyebrow line + 2-column title/photo block. The right
+   column carries the hero image (real on About, placeholder on
+   the verticals) so the page opens with both a face and a
+   sentence. */
+.sp-hero {
+  padding: clamp(40px, 5.5vw, 76px) 0 clamp(48px, 7vw, 96px);
+  border-bottom: 1px solid var(--rule);
+}
+.sp-hero .hero-eyebrow {
+  margin-bottom: clamp(52px, 7vw, 84px);
+}
+.sp-hero-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: clamp(36px, 5vw, 72px);
+  align-items: end;
+}
+.sp-hero-text { padding-bottom: 8px; }
+.sp-title {
+  font-family: 'Instrument Serif', 'Old Standard TT', Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(58px, 8.5vw, 132px);
+  line-height: 0.93;
+  letter-spacing: -0.012em;
+  margin: 0 0 26px;
+  color: var(--ink);
+  text-wrap: balance;
+}
+.sp-title em { font-style: italic; color: var(--accent); }
+.sp-standfirst {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: clamp(18px, 1.7vw, 24px);
+  line-height: 1.4;
+  color: var(--ink-2);
+  max-width: 40ch;
+  margin: 0;
+  text-wrap: pretty;
+}
+
+/* Text-only subpage heroes (the verticals + the essay — NOT the About
+   portrait hero, NOT the cs-page): replace the full-width rule under the
+   hero with a partial rule that spans only the title block, and tighten
+   the drop into the first section so it no longer reads as the same big
+   canyon used before the dark CTA. */
+body:not(.cs-page) .sp-hero:has(> .container > .sp-hero-text) {
+  border-bottom: 0;
+  padding-bottom: clamp(26px, 3.2vw, 44px);
+}
+body:not(.cs-page) .sp-hero > .container > .sp-hero-text::after {
+  content: "";
+  display: block;
+  width: clamp(240px, 46vw, 600px);
+  max-width: 100%;
+  height: 1px;
+  background: var(--rule);
+  margin-top: clamp(20px, 2.4vw, 32px);
+}
+body:not(.cs-page) .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
+  padding-top: clamp(28px, 3.4vw, 48px);
+}
+
+/* Hero figure — wraps either the real <img> or a placeholder
+   block. Aspect-ratio keeps the layout stable across pages. */
+.sp-hero-figure {
+  margin: 0;
+  aspect-ratio: 4/5;
+  background: var(--paper-2);
+  overflow: hidden;
+  border: 1px solid var(--rule);
+  position: relative;
+}
+.sp-hero-figure img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.sp-photo-placeholder {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(135deg, var(--paper-2) 0 14px, var(--paper-3) 14px 28px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sp-photo-placeholder::after {
+  content: "Hero photo placeholder";
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--margin);
+}
+
+/* SECTION — generic editorial section between hero and CTA. */
+.sp-section {
+  padding: clamp(56px, 7.5vw, 104px) 0;
+  border-bottom: 1px solid var(--rule);
+}
+.sp-section:last-of-type { border-bottom: 0; }
+.sp-section-eyebrow {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink);
+  font-weight: 500;
+  margin: 0 0 36px;
+}
+.sp-section-title {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: clamp(36px, 4.6vw, 64px);
+  line-height: 1.04;
+  margin: 0 0 clamp(28px, 3vw, 44px);
+  color: var(--ink);
+  text-wrap: balance;
+}
+.sp-section-title em { color: var(--accent); }
+.sp-section-subtitle {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: clamp(20px, 1.8vw, 26px);
+  line-height: 1.35;
+  color: var(--ink-2);
+  display: inline-block;
+  max-width: 64ch;
+  margin: 0 0 40px;
+  padding-bottom: clamp(18px, 2vw, 28px);
+  border-bottom: 1px solid var(--rule);
+}
+
+/* PROSE — editorial body text used by both About and Complexity
+   essays, and by the vertical pages' Problem / Approach blocks. */
+/* ─── ESSAY STRUCTURE (On Complex Work) ────────────────────────────
+   Breaks a long single-column essay into three labelled movements
+   with a structured "three ways" inset and one pull quote, so the
+   page reads as a composed feature rather than a wall of text. */
+
+/* Part label — mono eyebrow opening each movement, with a hairline
+   rule above it for a clean section break. The first one drops the
+   rule + top space since it sits right under the hero. */
+.essay-part {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--margin);
+  font-weight: 500;
+  margin: clamp(40px, 5vw, 64px) 0 24px;
+}
+.essay-part:first-child {
+  margin-top: 0;
+}
+
+/* Pull quote — hoists a vivid line out of the body into large
+   display italic, indented with an accent rule. Breaks the column
+   visually and gives the essay's best image room to breathe. */
+/* Pull quote — centered within the text column (matches the prose
+   measure, left-aligned like the body), moderate display size,
+   measure tuned so it wraps to three lines at most. */
+.essay-pull {
+  margin: clamp(32px, 4vw, 52px) 0;
+  padding: 0;
+  max-width: 64ch;
+  text-align: center;
+}
+.essay-pull blockquote {
+  margin: 0 auto;
+  max-width: 46ch;
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(23px, 2.1vw, 30px);
+  line-height: 1.2;
+  letter-spacing: -0.005em;
+  color: var(--accent);
+  text-wrap: balance;
+}
+@media (max-width: 640px) {
+  .essay-pull {
+    margin: 1.8em 0;
+  }
+}
+
+/* Three-ways inset — each "way" is a labelled row (mono number +
+   italic display name on the left, body on the right), separated
+   by hairlines. Mirrors the services-stack treatment so the page's
+   most argument-dense passage becomes its most scannable. */
+.essay-ways {
+  display: grid;
+  grid-template-columns: 1fr;
+  margin: 4px 0 0;
+}
+.essay-way {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 48px;
+  padding: 26px 0 30px;
+  align-items: start;
+  border-bottom: 1px solid var(--rule);
+}
+.essay-way:first-child { padding-top: 0; }
+.essay-way-head {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.essay-way-num {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 500;
+}
+.essay-way-name {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(24px, 2.2vw, 32px);
+  line-height: 1.05;
+  color: var(--ink);
+  letter-spacing: -0.005em;
+  text-wrap: balance;
+}
+.essay-way-body {
+  font-family: var(--serif);
+  font-size: clamp(17px, 1.25vw, 19px);
+  line-height: 1.55;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+.essay-way-body p { margin: 0; }
+
+/* Synthesis paragraph after the inset — slightly inset emphasis to
+   read as the passage's conclusion. */
+.essay-synthesis {
+  margin-top: clamp(26px, 3vw, 38px);
+}
+
+@media (max-width: 720px) {
+  .essay-way {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+/* ─── existing prose styles continue below ─────────────────────── */
+.sp-prose {
+  font-family: var(--serif);
+  font-size: clamp(17px, 1.25vw, 19px);
+  line-height: 1.55;
+  color: var(--ink);
+  max-width: 64ch;
+  text-wrap: pretty;
+}
+.sp-prose p { margin: 0 0 1.1em; }
+.sp-prose p:last-child { margin: 0; }
+.sp-prose .dropcap::first-letter {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 4.4em;
+  float: left;
+  line-height: 0.85;
+  padding: 6px 12px 0 0;
+  color: var(--accent);
+}
+
+/* LEDE — opening pull paragraph in essays / vertical pages.
+   Larger italic display type, sits above the body and announces
+   the argument like a deck on a feature story. */
+.sp-prose .sp-prose-lede {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(22px, 2vw, 30px);
+  line-height: 1.2;
+  color: var(--accent);
+  margin: 0 0 1.4em;
+  max-width: none;
+}
+.sp-prose .sp-prose-lede > span {
+  display: block;
+  text-wrap: balance;
+}
+/* CODA — closing sentence framed as a pulled summary.
+   Inline within its paragraph; bumps weight + size and shifts to
+   the accent ink so it lands as the last word. */
+.sp-prose .sp-prose-coda {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--accent);
+  box-shadow: inset 0 -0.15em 0 rgba(201, 122, 85, 0.18);
+  padding: 0 0.02em;
+}
+/* Underlined variant of the coda — a real rule beneath the line
+   rather than the faint highlight, for a closing sentence that
+   wants to land as the essay's signature. */
+.sp-prose .sp-prose-coda--underline {
+  box-shadow: none;
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+/* SERVICES STACK — three labelled blocks (Strategic Comms /
+   Thought Advisory / Workshops), filtered to a single audience
+   column. Big serif items, mono row-label, thin rules. */
+/* ─── SERVICES STACK — vertical pages (For Scale-Ups / NGOs /
+   Artists). Editorial index treatment: mono number kicker + a
+   bold serif-italic category title on the left, vertical
+   italic-serif deliverables list with dotted rules on the right.
+   Sub-list reads like a print-catalogue table of contents. */
+.sp-svc-stack {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+.sp-svc-block {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 56px;
+  padding: 28px 0 32px;
+  align-items: start;
+  border-bottom: 1px solid var(--rule);
+}
+.sp-svc-block:first-child { padding-top: 0; }
+.sp-svc-block:last-child { border-bottom: 0; padding-bottom: 0; }
+.sp-svc-label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.sp-svc-label .sp-svc-num {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--margin);
+  font-weight: 500;
+}
+.sp-svc-label .sp-svc-name {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(26px, 2.4vw, 34px);
+  line-height: 1.05;
+  color: var(--ink);
+  text-transform: none;
+  letter-spacing: -0.005em;
+  text-wrap: balance;
+}
+.sp-svc-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(22px, 2vw, 28px);
+  line-height: 1.22;
+  color: var(--ink);
+}
+.sp-svc-list li {
+  padding: 6px 0;
+  position: relative;
+}
+.sp-svc-list li::after { content: none; }
+
+/* Stacked layout (mobile/tablet): the desktop version separates each
+   service title from its list by putting it in its own left column. Once
+   the block collapses to one column that cue is gone and the italic-serif
+   title blends into the italic-serif list below it. Instrument Serif has no
+   true bold (faux-bold looks crude), so instead set the title UPRIGHT and
+   larger — an upright serif heading over an italic list is a clean
+   hierarchy — and open up the gap so each title clearly heads its group. */
+@media (max-width: 880px) {
+  .sp-svc-block { gap: 4px; }
+  .sp-svc-label { margin-bottom: 14px; }
+  .sp-svc-label .sp-svc-name {
+    font-style: normal;
+    font-size: clamp(30px, 6vw, 38px);
+    letter-spacing: -0.01em;
+  }
+}
+
+/* CASE STUDY — redesigned per Matteo's brief. Top bar with the
+   client name on the left and the year on the right, separated
+   by a rule; deliverable type in mono caps beneath. Then a two-
+   column block with the logo card and a single flowing description
+   paragraph. Below it, a full-width testimonial block on its own
+   tinted background with a circular avatar (or headshot) on the
+   left and a large italic pull quote on the right. */
+.sp-case-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-bottom: 12px;
+  margin: 0 0 8px;
+  border-bottom: 1px solid var(--ink);
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.sp-case-client {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: clamp(28px, 3.2vw, 42px);
+  line-height: 1.05;
+  margin: 0;
+  color: var(--ink);
+}
+.sp-case-year {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.2em;
+  color: var(--margin);
+}
+.sp-case-deliv {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 clamp(32px, 4vw, 52px);
+}
+.sp-case-body {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: clamp(36px, 4.5vw, 64px);
+  align-items: start;
+  margin: 0 0 clamp(44px, 5.5vw, 72px);
+}
+.sp-case-figure {
+  aspect-ratio: 4/3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(32px, 4vw, 56px);
+  border: 1px solid var(--ink);
+  box-sizing: border-box;
+}
+.sp-case-figure img {
+  max-width: 78%;
+  max-height: 70%;
+  object-fit: contain;
+  display: block;
+}
+/* Full-bleed variant — for a logo that is itself a two-tone brand card
+   (JERGON): fill the figure with the artwork so there's no letterbox and
+   no seam between the logo's own colour split and a faked gradient bg. */
+.sp-case-figure--bleed { padding: 0; }
+.sp-case-figure--bleed img {
+  max-width: 100%;
+  max-height: 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.sp-case-desc p {
+  font-family: var(--serif);
+  font-size: clamp(16.5px, 1.25vw, 19px);
+  line-height: 1.55;
+  color: var(--ink);
+  margin: 0 0 1.1em;
+  text-wrap: pretty;
+}
+.sp-case-desc p:last-child { margin: 0; }
+/* Full-width testimonial. Lives below the body, fills the section
+   container, with a tinted card background to set it off. */
+.sp-case-quote {
+  margin: 0;
+  padding: clamp(40px, 5vw, 64px) clamp(32px, 5vw, 64px);
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  gap: clamp(28px, 3.6vw, 52px);
+  align-items: center;
+}
+.sp-case-avatar {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6b3232, #5d2a2a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--paper);
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 40px;
+  letter-spacing: 0;
+  overflow: hidden;
+}
+.sp-case-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.sp-case-quote blockquote {
+  margin: 0;
+}
+.sp-case-quote blockquote p {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: clamp(22px, 2.2vw, 34px);
+  line-height: 1.28;
+  color: var(--ink);
+  margin: 0 0 18px;
+  text-wrap: pretty;
+}
+.sp-case-quote blockquote p em { color: var(--accent); font-style: italic; }
+.sp-case-quote blockquote p.sp-case-quote-body {
+  font-family: var(--serif);
+  font-style: normal;
+  font-size: clamp(18px, 1.5vw, 22px);
+  line-height: 1.55;
+  color: var(--ink);
+  margin: 0 0 20px;
+}
+.sp-case-quote cite {
+  display: block;
+  font-family: var(--mono);
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+@media (max-width: 880px) {
+  .sp-hero-grid { grid-template-columns: 1fr; gap: 32px; }
+  .sp-hero-figure { aspect-ratio: 4/3; max-height: 460px; }
+  .sp-svc-block { grid-template-columns: 1fr; gap: 12px; }
+  .sp-case-body { grid-template-columns: 1fr; gap: 28px; }
+  .sp-case-quote { grid-template-columns: 1fr; justify-items: center; text-align: center; }
+  .sp-cta-grid { grid-template-columns: 1fr; }
+}
+
+/* CORRESPONDENCE — compact dark CTA used at the bottom of every
+   subpage. Borrows the dark palette + button treatment from the
+   home page's № 06 Correspondence section, minus the method beats. */
+/* ─── № II FLAGSHIP TEASER ─────────────────────────────────────────
+   Dark inverted section that lives between Approach and Services
+   on vertical subpages. Compact preview of The Clarity Sessions —
+   pitch + a small "what's involved" sidebar + CTA to the full page.
+   Treatment rhymes with the № Correspondence section at page foot
+   so the page reads with two ink-on-paper "tiles" framing the
+   cream-coloured editorial body. */
+.sp-flagship {
+  background: var(--paper-2);
+  color: var(--ink);
+  padding: clamp(64px, 8vw, 104px) 0;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+}
+.sp-flagship-eyebrow {
+  color: var(--ink);
+  opacity: 1;
+}
+.sp-flagship-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: clamp(36px, 5vw, 80px);
+  align-items: start;
+}
+.sp-flagship-title {
+  font-family: var(--display);
+  font-weight: 400;
+  font-style: normal;
+  font-size: clamp(40px, 4.6vw, 64px);
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+  margin: 0 0 clamp(20px, 2vw, 28px);
+  text-wrap: balance;
+}
+.sp-flagship-title em {
+  font-style: italic;
+  color: var(--accent);
+}
+.sp-flagship-pitch {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(18px, 1.55vw, 22px);
+  line-height: 1.45;
+  margin: 0 0 18px;
+  max-width: 56ch;
+  color: var(--ink);
+}
+.sp-flagship-pitch--muted {
+  color: var(--ink-2);
+  font-style: italic;
+}
+.sp-flagship-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  padding: 14px 22px 16px;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink);
+  text-decoration: none;
+  transition: background .15s, color .15s;
+}
+.sp-flagship-cta:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+.sp-flagship-cta .arr {
+  font-style: normal;
+  transition: transform .2s ease;
+}
+.sp-flagship-cta:hover .arr {
+  transform: translateX(4px);
+}
+
+/* Aside: quiet sidebar with hairline rule above. The contents
+   echo the body but pull back in weight + size so it reads as
+   marginalia next to the main pitch. */
+.sp-flagship-aside {
+  border-top: 1px solid var(--ink);
+  padding-top: 18px;
+}
+.sp-flagship-aside-label {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--margin);
+  margin: 0 0 14px;
+}
+.sp-flagship-aside ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.sp-flagship-aside li {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: clamp(16px, 1.25vw, 19px);
+  line-height: 1.35;
+  color: var(--ink);
+  padding-left: 18px;
+  position: relative;
+}
+.sp-flagship-aside li::before {
+  content: "\2726";
+  position: absolute;
+  left: 0;
+  top: 0.3em;
+  color: var(--accent);
+  font-style: normal;
+  font-size: 0.72em;
+}
+.sp-flagship-format {
+  margin: 22px 0 0;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--margin);
+}
+.sp-flagship-format span { color: var(--ink); opacity: 1; }
+
+@media (max-width: 820px) {
+  .sp-flagship-grid { grid-template-columns: 1fr; }
+}
+
+/* ─── existing CTA section follows below ───────────────────────── */
+.sp-cta {
+  background: var(--ink);
+  color: var(--paper);
+  padding: clamp(56px, 7.5vw, 104px) 0;
+}
+.sp-cta-grid {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: clamp(40px, 5vw, 80px);
+  align-items: start;
+}
+.sp-cta-eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(250,244,230,0.55);
+  border-top: 1px solid rgba(250,244,230,0.42);
+  padding-top: 14px;
+  margin: 0;
+}
+.sp-cta-body { max-width: 580px; }
+.sp-cta-line {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: clamp(28px, 3.6vw, 52px);
+  line-height: 1.08;
+  margin: 0 0 14px;
+  color: var(--paper);
+  text-wrap: balance;
+}
+.sp-cta-line em { color: #C97A55; font-style: italic; }
+.sp-cta-sub {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: clamp(16px, 1.4vw, 21px);
+  color: rgba(250,244,230,0.78);
+  margin: 0 0 36px;
+}
+.sp-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 24px 12px;
+  background: var(--paper);
+  border: 1px solid var(--paper);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background .15s, color .15s;
+}
+.sp-cta-btn:hover { background: var(--ink); color: var(--paper); }
+.sp-cta-btn .arr { font-family: var(--mono); font-style: normal; font-size: 14px; }
+.sp-cta-email {
+  margin: 18px 0 0;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: #C97A55;
+}
+
+@media (max-width: 880px) {
+  .sp-hero-grid { grid-template-columns: 1fr; gap: 32px; }
+  .sp-hero-figure { aspect-ratio: 4/3; max-height: 460px; }
+  .sp-svc-block { grid-template-columns: 1fr; gap: 12px; }
+  .sp-cta-grid { grid-template-columns: 1fr; }
+
+  /* Across the whole mobile/stacked range the subpage eyebrow's top line
+     should read just "Field Notes" — no № prefix, no "I." numeral, and no
+     trailing rule. The masthead tag drops to its own second line. */
+  .sp-hero .he-pre,
+  .sp-hero .he-numeral,
+  .sp-hero .he-rule { display: none; }
+  .sp-hero .he-vol { flex-basis: 100%; }
+
+  /* About portrait: the shared 4/3 figure crops this 2:3 photo on
+     mobile/tablet. Give it the image's own ratio (and cap the width so it
+     doesn't dominate the wider tablet column) so the whole portrait shows. */
+  .about-portrait {
+    aspect-ratio: 1181 / 1772;
+    max-height: none;
+    max-width: 360px;
+    margin-inline: 0;
+  }
+  .about-portrait img { object-fit: contain; }
+}
+
+/* Tablet: there's room to run the About hero as two columns like desktop —
+   title + standfirst on the left, the portrait beside them on the right
+   (rather than stacked). Restore the desktop grid + gap; the portrait keeps
+   its whole-image 2:3 ratio from the ≤880 rule above and fills its column. */
+@media (min-width: 561px) and (max-width: 880px) {
+  .sp-hero-grid {
+    grid-template-columns: 1.1fr 1fr;
+    gap: clamp(36px, 5vw, 72px);
+  }
+  .about-portrait { max-width: none; }
+}
+
+/* ─── HERO / MASTHEAD ─── */
+.hero {
+  padding: clamp(56px, 7.5vw, 96px) 0;
+  border-bottom: 1px solid var(--ink);
+  position: relative;
+}
+.hero-eyebrow {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--margin);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+/* The horizontal rule between the eyebrow's left-aligned metadata
+   (№ 001 · Est.) and its right-aligned masthead tag (Vol. VII ·
+   Berlin). Replaces the older ::after pseudo-element so we can put
+   real content to the right of the line. */
+.hero-eyebrow .he-rule {
+  flex: 1;
+  height: 1px;
+  background: var(--ink);
+  align-self: center;
+}
+.hero-eyebrow .he-vol { color: var(--margin); }
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: clamp(28px, 5vw, 72px);
+  align-items: stretch;
+}
+/* Left column becomes a flex column with content pushed toward
+   the bottom — title + subtitle sit at a nice low position, CTA
+   row falls just below them, and the whole stack visually weights
+   against the portrait on the right (whose nameplate anchors the
+   same bottom edge). */
+.hero-grid > div:first-child {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.hero-title {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(56px, 9vw, 132px);
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+  margin: 0 0 18px;
+  text-wrap: balance;
+}
+.hero-title em {
+  font-style: italic;
+  color: var(--accent);
+}
+.hero-byline {
+  margin: 0 0 28px;
+  font-family: var(--display);
+  font-size: 22px;
+  line-height: 1.2;
+  color: var(--ink);
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--rule);
+  max-width: 36ch;
+}
+.byline-by {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--margin);
+}
+.byline-name {
+  font-style: italic;
+  font-size: 26px;
+  letter-spacing: 0.005em;
+}
+.hero-sub {
+  font-family: var(--display);
+  font-style: normal;
+  font-weight: 400;
+  font-size: clamp(20px, 2.2vw, 26px);
+  line-height: 1.4;
+  color: var(--ink);
+  max-width: 38ch;
+  margin: 0 0 32px;
+}
+.hero-sub em {
+  font-style: italic;
+  color: var(--ink-2);
+}
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 28px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--margin);
+  padding-top: 22px;
+  border-top: 1px solid var(--rule);
+}
+.hero-meta b { color: var(--ink); font-weight: 500; }
+
+.hero-portrait {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  background: var(--paper-2);
+  overflow: hidden;
+  border: 1px solid var(--ink);
+}
+.hero-portrait .ph-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 25%;
+}
+.hero-portrait .ph {
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      135deg,
+      rgba(25,23,19,.06) 0 1px,
+      transparent 1px 9px
+    );
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: 18px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--margin);
+}
+.hero-portrait .ph-fig {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--ink);
+  opacity: 0.42;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 22px;
+}
+.hero-right {
+  display: flex;
+  flex-direction: column;
+}
+.contributor-card {
+  margin-top: 14px;
+  padding: 16px 0 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+}
+.contrib-rule {
+  height: 1px;
+  background: var(--ink);
+  margin-bottom: 6px;
+}
+.contrib-name {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 26px;
+  line-height: 1;
+  color: var(--ink);
+}
+.contrib-role {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+.contrib-meta {
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4px;
+  border-top: 1px solid var(--rule);
+  padding-top: 10px;
+}
+.contrib-meta > div {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 12px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  align-items: baseline;
+}
+.contrib-meta dt { color: var(--margin); margin: 0; }
+.contrib-meta dd { color: var(--ink); margin: 0; }
+
+.hero-nameplate {
+  margin-top: 16px;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+}
+.np-rule {
+  flex: 0 0 100%;
+  height: 1px;
+  background: var(--ink);
+  margin-bottom: 10px;
+}
+.np-name {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(34px, 4vw, 52px);
+  line-height: 1;
+  color: var(--ink);
+  letter-spacing: -0.005em;
+}
+.np-role {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* Hero CTA row — primary "Get in touch" pill paired with ghost
+   "What is complex work?" pill. Both share the hero-feature pill
+   footprint; the ghost variant strips the fill so the primary
+   action reads first while keeping the curiosity hook equally
+   discoverable as an affordance. */
+.hero-cta-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: clamp(28px, 3.4vw, 44px);
+}
+.hero-cta-row .hero-feature {
+  margin-top: 0;
+}
+.hero-cta-row .hero-feature--ghost {
+  background: transparent;
+  border: 1px solid var(--ink);
+}
+.hero-cta-row .hero-feature--ghost .hero-feature-title {
+  color: var(--ink);
+}
+.hero-cta-row .hero-feature--ghost .hero-feature-arrow {
+  color: var(--accent);
+}
+.hero-cta-row .hero-feature--ghost:hover {
+  background: var(--ink);
+  border-color: var(--ink);
+}
+.hero-cta-row .hero-feature--ghost:hover .hero-feature-title {
+  color: var(--paper);
+}
+
+/* Phone: keep the two hero CTAs side-by-side instead of wrapping to a
+   stack. Each pill hugs its own text (no stretching, no floating arrow),
+   with type/padding shrunk just enough that both fit one line at 390px. */
+@media (max-width: 560px) {
+  /* Eyebrow: on a narrow screen the flex:1 rule collapses to a broken
+     ~14px stub and shoves "Vol. VII · Berlin" against the right edge.
+     Drop the stretched rule so the three mono tags read as one tidy
+     left-aligned line under the masthead, and centre the line vertically
+     in the gap between the nav and the hero title. */
+  .hero { padding-top: 38px; }
+  /* Optically align the display title's first line with the mono grid:
+     the large round "C" carries heavy left side-bearing, so its box sits
+     at the margin but the ink looks ~0.06em indented next to the nav mark
+     and eyebrow. text-indent nudges only the first line ("Clarity") flush;
+     "for"/"Work" are unaffected. */
+  .hero-title { text-indent: -0.06em; }
+  .hero-eyebrow {
+    flex-wrap: wrap;
+    gap: 6px 0;
+    margin-bottom: 40px;
+  }
+  .hero-eyebrow .he-rule { display: none; }
+  /* middot between the two metadata tags on line 1 */
+  .hero-eyebrow > span:nth-child(2)::before {
+    content: "·";
+    margin: 0 0.7em;
+    color: var(--margin);
+  }
+  /* push the masthead tag onto its own second line so the row isn't jammed */
+  .hero-eyebrow .he-vol { flex-basis: 100%; }
+
+  /* "What is complex work" subpage: the top eyebrow line should read just
+     "Field Notes" on mobile — drop the № prefix and the "I." numeral. */
+  .sp-hero .he-pre,
+  .sp-hero .he-numeral { display: none; }
+
+  /* The portrait is a <figure>, so the UA default 40px side margin was
+     centring it while the rest of the hero sits at the left margin. Pull
+     it flush-left to match — and size it to the combined width of the two
+     CTA buttons above so its right edge lines up with theirs. */
+  .hero .hero-portrait { margin-inline: 0; max-width: 307px; }
+
+  .hero-cta-row {
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 10px;
+    margin-top: 14px;
+  }
+  .hero-cta-row .hero-feature {
+    flex: 0 1 auto;
+    min-width: 0;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 15px;
+  }
+  .hero-cta-row .hero-feature-title { font-size: 15px; line-height: 1.15; }
+  .hero-cta-row .hero-feature-arrow { font-size: 15px; flex: none; }
+}
+
+/* Calling-card variant of the nameplate — adds a "Get in touch"
+   pill below the name + role, matching the hero-feature pill on
+   the left column so the two CTAs read as siblings. The portrait
+   + nameplate + pill together form the calling card. */
+.hero-nameplate--card .np-break {
+  flex: 0 0 100%;
+  height: 0;
+}
+.hero-nameplate--card .np-contact.hero-feature {
+  flex: 0 0 auto;
+  align-self: flex-start;
+  margin-top: 14px;
+}
+
+/* The hero stays two-column (title/sub/buttons | portrait, like desktop)
+   all the way down through the tablet range — there's room — and only
+   collapses to a single stacked column on actual phones (≤560px), where
+   the eyebrow/CTA/portrait mobile rules above already take over. */
+@media (max-width: 560px) {
+  .hero-grid { grid-template-columns: 1fr; }
+  .hero-portrait { max-width: 480px; aspect-ratio: 4/5; }
+}
+
+/* Two-column hero (tablet + desktop): line up the bottom of the CTA
+   buttons in the left column with the bottom of "Matteo Calla" on the
+   right. Two parts: (1) make the right column a flex column whose portrait
+   absorbs any extra stretch, so the nameplate is always pinned to the row
+   bottom (no slack can open beneath it); (2) trim the name's font descent
+   (~0.12em) so its box bottom meets the baseline — otherwise the empty
+   space below the descenderless "Matteo Calla" leaves the hard-edged
+   buttons sitting visibly lower. */
+@media (min-width: 561px) {
+  .hero-grid > div:nth-child(2) { display: flex; flex-direction: column; }
+  .hero-grid > div:nth-child(2) .hero-portrait { flex: 1 1 auto; }
+  .np-name { margin-bottom: -0.12em; }
+}
+
+/* Tablet (two-column hero): drop the UA <figure> margin so the portrait
+   fills its grid column flush — edges aligned with the nameplate rule and
+   the right margin — instead of floating inset. Desktop keeps its own
+   wider column where that inset reads as intentional breathing room. */
+@media (min-width: 561px) and (max-width: 880px) {
+  .hero .hero-portrait { margin-inline: 0; }
+}
+
+/* ─── CREDENTIALS — intro + flashing list ─── */
+.cred-section {
+  background: var(--ink);
+  color: var(--paper);
+  border-bottom: 1px solid var(--ink);
+  padding: clamp(56px, 7.5vw, 96px) 0;
+}
+.cred-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: clamp(36px, 6vw, 80px);
+  align-items: start;
+}
+.cred-intro {
+  position: relative;
+}
+.cred-eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--paper);
+  margin-bottom: 22px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(239,226,201,0.35);
+}
+.cred-intro p {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(22px, 2.6vw, 30px);
+  line-height: 1.35;
+  color: var(--paper);
+  margin: 0;
+  text-wrap: pretty;
+}
+.cred-flash {
+  border-left: 1px solid rgba(239,226,201,0.22);
+  padding-left: clamp(24px, 3vw, 40px);
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+}
+.cred-flash-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--paper);
+  margin-bottom: 22px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(239,226,201,0.35);
+}
+.cred-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.cred-line {
+  display: block;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: clamp(22px, 2.4vw, 28px);
+  line-height: 1.4;
+  color: rgba(239,226,201,0.32);
+  transition: color .45s ease;
+}
+.cred-line.is-on {
+  color: var(--paper);
+}
+.cred-mode-flicker .cred-line.is-on .cred-text {
+  animation: cred-flicker .35s steps(2);
+}
+@keyframes cred-flicker {
+  0%, 100% { opacity: 1; }
+  40% { opacity: 0.3; }
+  60% { opacity: 0.85; }
+}
+
+/* vertical ticker for marquee mode */
+.cred-ticker {
+  height: 44px;
+  overflow: hidden;
+  position: relative;
+}
+.cred-ticker ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  transition: transform .55s cubic-bezier(.7,.1,.2,1);
+}
+.cred-ticker li {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: clamp(20px, 2.2vw, 26px);
+  color: var(--paper);
+  white-space: nowrap;
+}
+
+/* Phones only: stack the credentials section and apply legibility tweaks.
+   Tablet (561–880px) keeps the desktop two-column layout — there's room. */
+@media (max-width: 560px) {
+  .cred-grid { grid-template-columns: 1fr; }
+  .cred-flash { border-left: 0; padding-left: 0; border-top: 1px solid rgba(239,226,201,0.22); padding-top: 28px; }
+  /* On a phone the desktop 32%-opacity resting state leaves five of the six
+     credentials nearly illegible on a quick scroll, so the section's whole
+     point (breadth) is lost. Lift the resting contrast on mobile; the moving
+     spotlight (.is-on → full paper) still reads as a quiet accent. */
+  .cred-line { color: rgba(239,226,201,0.62); }
+  /* In the stacked layout the intro paragraph re-wraps wider, so the
+     full-size 5em drop cap spans ~5 lines and strands a single line
+     below it at the far-left margin. Shrink it so ~3 lines hug the cap
+     and the rest flow uniformly underneath (matching the desktop intent
+     and keeping the last line aligned with the lines above it). */
+  .cred-section .dropcap::first-letter { font-size: 2.3em; padding-bottom: 0; }
+}
+
+/* ─── SECTION HEADERS ─── */
+.section {
+  padding: clamp(56px, 7.5vw, 96px) 0;
+  border-bottom: 1px solid var(--ink);
+}
+.sec-head {
+  display: block;
+  margin-bottom: clamp(36px, 5vw, 60px);
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--rule);
+}
+/* The bottom-most text element inside any section head should not carry
+   its own bottom margin — the gap from text to the grey rule is exactly
+   sec-head's padding-bottom (18px), uniform across all sections. */
+.sec-head :last-child,
+.svc-head :last-child {
+  margin-bottom: 0;
+}
+.sec-num {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--margin);
+  margin: 0 0 22px;
+}
+.sec-title {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(36px, 5vw, 64px);
+  line-height: 1.0;
+  letter-spacing: -0.015em;
+  margin: 0;
+  text-wrap: balance;
+}
+.sec-title em { font-style: italic; color: var(--accent); }
+
+@media (max-width: 720px) {
+  /* .sec-head already block-stacks across all breakpoints */
+}
+
+.cat-intro {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: clamp(20px, 2.4vw, 26px);
+  line-height: 1.4;
+  color: var(--ink-2);
+  max-width: 56ch;
+  margin: 0 0 56px;
+}
+.cat-list {
+  border-top: 0;
+}
+.cat-card,
+.cat-card--full {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: clamp(28px, 4vw, 56px);
+  padding: 36px 0 40px;
+  border-bottom: 1px solid var(--rule);
+  align-items: start;
+  position: relative;
+}
+.cat-card--full:last-child,
+.cat-card:last-child { border-bottom: 0; }
+.cat-card--full:hover,
+.cat-card:hover { background: linear-gradient(to right, var(--paper-3), transparent 60%); }
+
+/* Featured (hybrid leading entry) */
+.cat-featured-wrap {
+  border-top: 0;
+  border-bottom: 0;
+  margin-bottom: 48px;
+}
+.cat-card--featured {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: clamp(24px, 4vw, 56px);
+  padding: 48px 24px 56px;
+  align-items: start;
+  background: linear-gradient(to right, var(--paper-3), transparent 70%);
+  border: 0;
+}
+.cat-card--featured .cat-num-lg { font-size: 56px; }
+.cat-card--featured .logo-slot { max-width: 200px; }
+.cat-card--featured .cat-deliv {
+  font-size: clamp(36px, 4.4vw, 56px);
+  line-height: 1.0;
+}
+.cat-card--featured .cat-desc { font-size: 18px; max-width: 50ch; }
+
+/* Grid (two-up) */
+.cat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  border-top: 0;
+}
+.cat-card--grid {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 22px;
+  padding: 28px 28px 32px;
+  border-bottom: 1px solid var(--rule);
+  border-right: 1px solid var(--rule);
+  align-items: start;
+}
+/* The bottom row of the 2-col grid (both cards) closes with an ink rule so
+   the final hairline matches the ink top rule above the catalogue. Without
+   this the left-hand last-row card kept its grey "between-rows" rule and
+   visually misaligned with its right-hand neighbour. */
+.cat-card--grid:nth-last-child(2):nth-child(odd),
+.cat-card--grid:last-child { border-bottom: 0; }
+.cat-card--grid:nth-child(2n) { border-right: 0; }
+.cat-card--grid .cat-num-lg { font-size: 28px; }
+.cat-card--grid .logo-slot { max-width: 90px; font-size: 16px; padding: 6px; }
+.cat-card--grid .logo-slot .logo-hint { font-size: 7.5px; letter-spacing: 0.16em; }
+.cat-card--grid .cat-deliv {
+  font-size: clamp(22px, 2.4vw, 28px);
+  line-height: 1.1;
+  margin-bottom: 10px;
+}
+.cat-card--grid .cat-desc { font-size: 15px; line-height: 1.5; margin-bottom: 16px; }
+.cat-card--grid .cat-tagline { gap: 4px 8px; margin-bottom: 8px; }
+.cat-card--grid .cat-client-type { font-size: 10px; }
+.cat-card--grid .cat-client { font-size: 16px; }
+.cat-card--grid:hover { background: var(--paper-3); }
+
+@media (max-width: 880px) {
+  .cat-card--featured,
+  .cat-card,
+  .cat-card--full {
+    grid-template-columns: 1fr;
+    padding: 32px 0 36px;
+  }
+  .cat-card--featured { padding: 36px 16px 40px; }
+  .cat-left-col { flex-direction: row; align-items: flex-start; gap: 20px; flex-wrap: wrap; }
+  .cat-logo { max-width: 200px; }
+  .cat-grid { grid-template-columns: 1fr; }
+  .cat-card--grid { grid-template-columns: 130px 1fr; border-right: 0; }
+  .cat-card--grid .cat-logo { max-width: 130px; }
+}
+
+.cat-left-col {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  align-items: flex-start;
+}
+.cat-num-col {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding-top: 4px;
+}
+.cat-num-lg {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 36px;
+  line-height: 1;
+  color: var(--accent);
+}
+.cat-year {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--margin);
+}
+
+/* logo box — standard square, per-item background fills letterboxing */
+.cat-logo {
+  width: 100%;
+  max-width: 240px;
+  aspect-ratio: 1 / 1;
+  border: 1px solid var(--rule);
+  background: var(--paper-3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 0;
+}
+.cat-card--featured .cat-logo { max-width: 320px; }
+.cat-card--grid .cat-logo { max-width: 160px; }
+.logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+}
+.logo-mono {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 32px;
+  color: var(--ink-2);
+}
+
+/* legacy placeholder (used when no logo image) */
+.logo-slot {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 22px;
+  color: var(--ink-2);
+  padding: 8px;
+  text-align: center;
+}
+.logo-slot .logo-hint {
+  font-family: var(--mono);
+  font-style: normal;
+  font-size: 8.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--margin);
+}
+.logo-slot .logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+}
+
+.cat-content {
+  min-width: 0;
+}
+.cat-tagline {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--rule);
+}
+.cat-client-type {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--accent);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.cat-client-type::before {
+  content: "";
+  display: inline-block;
+  width: 18px;
+  height: 1.5px;
+  background: var(--accent);
+}
+.cat-sep { display: none; }
+.cat-client {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 22px;
+  color: var(--ink);
+}
+.cat-card--grid .cat-client-type { font-size: 11.5px; letter-spacing: 0.22em; }
+.cat-card--grid .cat-client-type::before { width: 14px; }
+.cat-card--featured .cat-client-type { font-size: 14px; }
+.cat-deliv {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(28px, 3.4vw, 40px);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  margin: 0 0 14px;
+  text-wrap: balance;
+}
+.cat-desc {
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--ink-2);
+  margin: 0 0 20px;
+  max-width: 60ch;
+}
+.cat-more {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border-bottom: 1px solid var(--ink);
+  padding-bottom: 4px;
+  transition: color .15s, border-color .15s;
+}
+.cat-more:hover {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+.cat-more-arr {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 14px;
+  letter-spacing: 0;
+  transition: transform .2s;
+}
+.cat-more:hover .cat-more-arr { transform: translateX(4px); }
+
+@media (max-width: 880px) {
+  .cat-card {
+    grid-template-columns: 80px 1fr;
+    grid-template-areas:
+      "num     logo"
+      "content content";
+    gap: 20px;
+  }
+  .cat-num-col { grid-area: num; }
+  .cat-logo { grid-area: logo; justify-self: end; }
+  .cat-content { grid-area: content; }
+  .logo-slot { max-width: 100px; }
+}
+@media (max-width: 520px) {
+  .cat-card {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "num"
+      "logo"
+      "content";
+  }
+  .cat-num-col { flex-direction: row; align-items: baseline; gap: 14px; }
+  .cat-logo { justify-self: start; }
+}
+
+/* ─── APPROACH ─── */
+/* Pillars layout: aphorism + "in three acts" subtitle + three columns.
+   Top padding is intentionally tight: the preceding section's bottom
+   border + this section's kicker line are already doing the divider work,
+   so we don't need another canyon of white space between them. */
+.section--approach {
+  border-bottom: 0;
+}
+/* Stale override removed — services section now uses default .section
+   padding so its bottom-padding matches the other sections, putting the
+   floating divider visually equidistant from neighbouring content. */
+.appr-kicker {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--margin);
+  padding-bottom: 14px;
+  margin-bottom: 28px;
+  border-bottom: 1px solid var(--rule);
+}
+.appr-hero {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(36px, 5vw, 64px);
+  line-height: 1.0;
+  letter-spacing: -0.015em;
+  color: var(--accent);
+  text-wrap: balance;
+  margin: 0 0 14px;
+  max-width: 22ch;
+}
+.appr-hero em { font-style: normal; color: var(--ink); }
+.appr-sub {
+  font-family: var(--display);
+  font-style: normal;
+  font-size: clamp(22px, 2.6vw, 32px);
+  line-height: 1.2;
+  letter-spacing: -0.005em;
+  color: var(--ink-2);
+  margin: 0 0 28px;
+}
+.appr-sub em { font-style: italic; color: var(--accent); }
+.appr-pillars {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border-top: 0;
+  border-bottom: 0;
+}
+/* Approach now uses default .sec-head spacing for cross-section
+   consistency. */
+.appr-col {
+  padding: 44px 36px 44px 0;
+  border-right: 1px solid var(--rule);
+}
+.appr-col:last-child { border-right: 0; padding-right: 0; }
+.appr-col:not(:first-child) { padding-left: 36px; }
+.appr-lbl {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(24px, 2.5vw, 30px);
+  line-height: 1;
+  letter-spacing: -0.005em;
+  color: var(--ink);
+  margin-bottom: 22px;
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+}
+.appr-num {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: clamp(34px, 3.5vw, 44px);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--accent);
+}
+.appr-head {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(30px, 3.4vw, 42px);
+  line-height: 1.0;
+  letter-spacing: -0.015em;
+  margin: 0 0 22px;
+  text-wrap: balance;
+}
+.appr-head em { font-style: italic; color: var(--accent); }
+.appr-body {
+  font-family: var(--display);
+  font-size: clamp(16px, 1.4vw, 18px);
+  line-height: 1.45;
+  color: var(--ink-2);
+  margin: 0;
+}
+.appr-body em { font-style: italic; color: var(--ink); }
+
+@media (max-width: 880px) {
+  .appr-pillars { grid-template-columns: 1fr; }
+  .appr-col {
+    border-right: 0;
+    border-bottom: 1px solid var(--rule);
+    padding: 28px 0;
+  }
+  /* tighten the label/head rhythm on mobile so each act reads as a compact
+     beat and the three-part stack isn't such a long scroll */
+  .appr-lbl { margin-bottom: 14px; }
+  .appr-head { margin-bottom: 14px; }
+  .appr-col:not(:first-child) { padding-left: 0; }
+  .appr-col:last-child { border-bottom: 0; padding-bottom: 0; }
+}
+
+/* ─── SERVICES · editorial matrix ───────────────────────────── */
+/* services uses default .section padding for cross-section consistency */
+
+.svc-head {
+  display: block;
+  gap: 32px;
+  align-items: baseline;
+  margin-bottom: clamp(36px, 5vw, 60px);
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--rule);
+}
+.svc-head .sec-num {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--margin);
+  margin: 0 0 22px;
+}
+.svc-head .sec-title {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(36px, 5vw, 64px);
+  line-height: 1.0;
+  letter-spacing: -0.015em;
+  margin: 0 0 18px;
+  text-wrap: balance;
+}
+.svc-head .sec-title em { font-style: italic; color: var(--accent); }
+.svc-sub {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: clamp(20px, 2.2vw, 26px);
+  line-height: 1.4;
+  color: var(--ink-2);
+  margin: 0;
+  max-width: 58ch;
+  text-wrap: pretty;
+}
+.svc-sub b {
+  font-weight: 400;
+  font-style: normal;
+  color: var(--accent);
+}
+
+/* The grid — 4 cols × 4 rows. No heavy ink borders; everything reads
+   as an open editorial grid with grey hairlines tracking the axes. */
+.m-grid {
+  display: grid;
+  grid-template-columns: 260px 1fr 1fr 1fr;
+}
+.m-cell {
+  padding: 22px 24px;
+  border-right: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  background: var(--paper);
+  transition: background-color .18s ease;
+}
+.m-cell:nth-child(4n) { border-right: 0; }
+.m-grid > .m-cell:nth-last-child(-n+4) { border-bottom: 0; }
+
+/* Hover spotlight: when any cell has the is-hover class (set by React
+   based on which cell, row-head, or col-head the cursor is on), dim
+   every cell that doesn't have it. Mirrors the testimonials section. */
+.m-cell {
+  transition: opacity .18s ease;
+}
+/* Hover spotlight — mode-dependent. The React component sets
+   data-mode on .m-grid to one of "cell" | "row" | "col" | "".
+
+   cell mode: a single data cell is hovered. Dim every non-is-hover cell
+     (so other row heads + other col heads + other data cells fade).
+
+   row mode: a row label is hovered. Dim data cells outside the row AND
+     other row labels. ALL column labels stay full opacity.
+
+   col mode: a column label is hovered. Dim data cells outside the column
+     AND other column labels. ALL row labels stay full opacity. */
+
+/* cell mode */
+.m-grid[data-mode="cell"] .m-cell:not(.is-hover) {
+  opacity: 0.22;
+}
+
+/* row mode */
+.m-grid[data-mode="row"] .m-data:not(.is-hover),
+.m-grid[data-mode="row"] .m-row-head:not(.is-hover),
+.m-grid[data-mode="row"] .m-corner {
+  opacity: 0.22;
+}
+
+/* col mode */
+.m-grid[data-mode="col"] .m-data:not(.is-hover),
+.m-grid[data-mode="col"] .m-col-head:not(.is-hover),
+.m-grid[data-mode="col"] .m-corner {
+  opacity: 0.22;
+}
+
+.m-col-head,
+.m-row-head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  background: var(--paper);
+}
+.m-col-head {
+  padding-top: 4px;
+  padding-bottom: 22px;
+}
+.m-label {
+  font-family: var(--display);
+  font-style: normal;
+  font-weight: 400;
+  font-size: clamp(22px, 2.6vw, 30px);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+.m-corner {
+  background: var(--paper);
+  border-right: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+
+/* Cell content — italic-serif items, breathing room, dotted internal rules */
+.m-cell ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+.m-cell li {
+  font-family: var(--serif);
+  font-size: clamp(14px, 1.1vw, 15.5px);
+  line-height: 1.45;
+  letter-spacing: -0.005em;
+  color: var(--ink);
+  padding: 8px 0;
+  border-bottom: 1px dotted var(--rule);
+}
+.m-cell li:first-child { padding-top: 0; }
+.m-cell li:last-child { border-bottom: 0; padding-bottom: 0; }
+
+@media (max-width: 880px) {
+  /* svc-head already block-stacks */
+  .m-grid { grid-template-columns: 1fr; }
+  .m-cell, .m-col-head, .m-row-head, .m-corner {
+    border-right: 0 !important;
+    border-bottom: 1px solid var(--rule);
+  }
+  .m-corner { display: none; }
+  .m-col-head .m-label,
+  .m-row-head .m-label {
+    /* on mobile, the heads become breaks between sections */
+    font-style: italic;
+    color: var(--accent);
+  }
+}
+
+/* Section-close floating divider — Option B.
+   Catalogue, Approach, and Services each end with a single ink hairline
+   that sits at the section's outer bottom edge. Because adjacent sections
+   have roughly equal vertical padding, this places the line visually
+   midway in the gap between sections — a quiet chapter break, not a
+   closing frame. Width matches the inner container (max-width minus
+   gutters), never running edge-to-edge of the viewport. */
+.section--catalogue,
+.section--approach,
+.section--services {
+  position: relative;
+}
+.section--catalogue::after,
+.section--approach::after,
+.section--services::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: calc(min(100%, var(--maxw)) - var(--gutter) * 2);
+  height: 1px;
+  background: var(--ink);
+  transform: translateX(-50%);
+}
+
+/* Drop the old section-level borders — the floating divider above is
+   now the section close. */
+.section--catalogue { border-bottom: 0; }
+.section--approach { border-bottom: 0; }
+.section--services { border-bottom: 0; }
+#services.section { border-bottom: 0; }
+
+/* Drop the old per-grid services divider — services now uses the
+   shared section-level ::after. */
+.m-grid::after { content: none; }
+
+/* ─── SERVICES — mobile/tablet redesign (≤880px) ──────────────
+   The desktop x/y matrix (service type × audience) can't fold into a
+   narrow viewport, so below 880px it's swapped for an audience-led
+   layout. Two variants, toggled by the "Services (mobile)" tweak:
+     • Tabs  — pick an audience, see its three service groups + a CTA
+     • Cards — every audience stacked as a card with the same groups
+   Tablet (561–880px) uses the extra width to lay each audience's
+   three groups side-by-side. Desktop keeps .m-grid; .svc-m is hidden. */
+.svc-m { display: none; }
+@media (max-width: 880px) {
+  .m-grid { display: none; }
+  .svc-m { display: block; }
+}
+
+/* Tabs */
+.svc-m-tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: clamp(22px, 4vw, 30px);
+}
+.svc-m-tab {
+  appearance: none;
+  flex: 1;
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  padding: 8px 4px 14px;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: clamp(16px, 4.3vw, 23px);
+  line-height: 1.05;
+  color: var(--margin);
+  cursor: pointer;
+  transition: color .18s ease, border-color .18s ease;
+}
+.svc-m-tab.is-active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* Shared service groups (tabs + cards) */
+.svc-m-group { margin: 0 0 clamp(22px, 4.5vw, 30px); }
+.svc-m-group-label {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 10px;
+}
+.svc-m-group ul { list-style: none; margin: 0; padding: 0; }
+.svc-m-group li {
+  font-family: var(--serif);
+  font-size: clamp(15px, 1.1vw, 16px);
+  line-height: 1.45;
+  color: var(--ink);
+  position: relative;
+  padding: 8px 0 8px 18px;
+  border-bottom: 1px dotted var(--rule);
+}
+.svc-m-group li:last-child { border-bottom: 0; }
+.svc-m-group li::before {
+  content: '\2726';
+  position: absolute;
+  left: 0;
+  top: 9px;
+  font-size: 10px;
+  color: var(--accent);
+}
+
+/* Tab CTA */
+.svc-m-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--paper);
+  background: var(--accent);
+  padding: 13px 20px;
+  text-decoration: none;
+  border-radius: 2px;
+}
+.svc-m-cta span { transition: transform .2s ease; }
+.svc-m-cta:hover span { transform: translateX(3px); }
+
+/* Cards */
+.svc-m-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: clamp(20px, 4.5vw, 26px);
+  margin: 0 0 16px;
+  transition: border-color .18s ease;
+}
+.svc-m-card:last-child { margin-bottom: 0; }
+.svc-m-card:hover { border-color: var(--accent); }
+.svc-m-card-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 clamp(18px, 3.5vw, 24px);
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--rule);
+}
+.svc-m-card-name {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: clamp(21px, 5.4vw, 28px);
+  line-height: 1.04;
+  color: var(--accent);
+}
+.svc-m-card-arr {
+  font-family: var(--display);
+  font-size: 22px;
+  color: var(--accent);
+  transition: transform .2s ease;
+}
+.svc-m-card:hover .svc-m-card-arr { transform: translateX(4px); }
+.svc-m-card-body .svc-m-group:last-child { margin-bottom: 0; }
+
+/* Tablet (561–880px): use the width — lay the three service groups
+   of the active audience (tabs) or of each card side-by-side, so the
+   cross-section reads almost like a compact per-audience matrix. */
+@media (min-width: 561px) and (max-width: 880px) {
+  .svc-m--tabs .svc-m-groups {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(22px, 3.4vw, 36px);
+  }
+  .svc-m--tabs .svc-m-groups .svc-m-group { margin-bottom: 0; }
+  .svc-m--tabs .svc-m-cta { margin-top: clamp(26px, 4vw, 36px); }
+  .svc-m-card-body {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(20px, 3vw, 30px);
+  }
+  .svc-m-card-body .svc-m-group { margin-bottom: 0; }
+}
+
+/* ─── TESTIMONIALS — typographic spread (no cards) ───────────── */
+
+.section--testimonials {
+  /* uses default .section vertical padding so the floating ink divider
+     above sits equidistant between services and testimonials content. */
+}
+
+.avatar {
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--paper);
+  flex: 0 0 auto;
+  overflow: hidden;
+  box-shadow: 0 1px 0 rgba(0,0,0,.08), 0 0 0 1px rgba(0,0,0,.04);
+}
+.avatar-init {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 0.34em;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+.avatar-photo {
+  object-fit: cover;
+  display: block;
+  filter: grayscale(1) contrast(1.04);
+  border-radius: 999px;
+}
+
+/* Asymmetric typographic spread.
+   6-col grid; quotes span 4/3/2 cols by size. No cards — page bleeds
+   through. Quote size carries the visual hierarchy. */
+.ts-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-auto-flow: dense;
+  gap: 48px 36px;
+  align-items: start;
+}
+.ts {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  position: relative;
+  transition: opacity .25s ease;
+  opacity: 1;
+}
+.ts.lg { grid-column: span 4; }
+.ts.md { grid-column: span 3; }
+.ts.sm { grid-column: span 2; }
+
+.ts blockquote {
+  margin: 0;
+  font-family: var(--display);
+  font-style: italic;
+  line-height: 1.2;
+  color: var(--ink);
+  text-wrap: pretty;
+  font-weight: 400;
+  letter-spacing: -0.005em;
+  position: relative;
+}
+.ts blockquote::before {
+  content: "\201C";
+  display: block;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 1.2em;
+  line-height: 0.4;
+  color: var(--accent);
+  opacity: 0.7;
+  margin-bottom: 0.15em;
+}
+.ts blockquote em { font-style: normal; color: var(--accent); }
+.ts blockquote :is(h1, h2, h3, h4, h5, h6, p) {
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+}
+.ts.lg blockquote { font-size: clamp(28px, 3.6vw, 42px); line-height: 1.15; }
+.ts.md blockquote { font-size: clamp(20px, 2.2vw, 26px); }
+.ts.sm blockquote { font-size: clamp(18px, 1.7vw, 20px); line-height: 1.3; }
+
+.ts-body {
+  margin: 0;
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  color: var(--margin);
+  line-height: 1.5;
+  text-wrap: pretty;
+  font-weight: 400;
+}
+.ts.lg .ts-body { font-size: clamp(15px, 1.1vw, 17px); }
+.ts.md .ts-body { font-size: 14.5px; line-height: 1.5; }
+.ts.sm .ts-body { font-size: 13.5px; line-height: 1.5; }
+
+.ts-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid var(--rule);
+}
+.ts-head figcaption {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.ts-who {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 18px;
+  line-height: 1.1;
+  color: var(--ink);
+}
+.ts-org {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin-top: 4px;
+}
+.ts-city {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--margin);
+  margin-top: 1px;
+}
+
+/* Spotlight: dim other quotes ONLY when one is actively being hovered.
+   `:has(...)` ensures we don't dim while the cursor is just floating in
+   gaps between quotes. */
+.ts-grid:has(.ts:hover) .ts:not(:hover) {
+  opacity: 0.22;
+}
+
+@media (max-width: 880px) {
+  .ts-grid { grid-template-columns: 1fr; gap: 36px; }
+  .ts.lg, .ts.md, .ts.sm { grid-column: 1 / -1; }
+}
+
+/* ─── CTA — How we work together (dark Method + CTA panel) ─── */
+.section--cta {
+  background: var(--ink);
+  color: var(--paper);
+  padding-top: clamp(56px, 7.5vw, 96px);
+  padding-bottom: clamp(56px, 7.5vw, 96px);
+  border-bottom: 0;
+}
+.section--cta .sec-head {
+  border-bottom-color: rgba(250,244,230,0.22);
+}
+.section--cta .sec-num { color: rgba(250,244,230,0.55); }
+.section--cta .sec-title { color: var(--paper); }
+.section--cta .sec-title em { color: #C97A55; }
+
+.ctaA {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 64px;
+  align-items: start;
+}
+.ctaA-method { display: flex; flex-direction: column; gap: 36px; }
+.ctaA-beat {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 18px;
+  align-items: baseline;
+  padding-bottom: 28px;
+  border-bottom: 1px solid rgba(250,244,230,0.15);
+}
+.ctaA-beat:last-child { border-bottom: 0; padding-bottom: 0; }
+.ctaA-num {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 36px;
+  line-height: 1;
+  color: #C97A55;
+}
+.ctaA-t {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(24px, 2.6vw, 30px);
+  line-height: 1.1;
+  letter-spacing: -0.005em;
+  color: #C97A55;
+  margin: 0 0 8px;
+}
+.ctaA-b {
+  font-family: var(--serif);
+  font-size: clamp(15px, 1.4vw, 17px);
+  line-height: 1.55;
+  color: rgba(250,244,230,0.82);
+  margin: 0;
+  max-width: 48ch;
+  text-wrap: pretty;
+}
+.ctaA-panel {
+  background: var(--paper);
+  color: var(--ink);
+  padding: 36px 32px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.ctaA-open {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: clamp(18px, 1.8vw, 22px);
+  line-height: 1.4;
+  margin: 0;
+  color: var(--ink-2);
+}
+.ctaA-invite {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: clamp(28px, 3.2vw, 38px);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: var(--accent);
+  margin: 0;
+  text-wrap: balance;
+}
+.ctaA-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 22px;
+  padding: 16px 24px;
+  text-decoration: none;
+  letter-spacing: -0.005em;
+  margin-top: 8px;
+  align-self: flex-start;
+  transition: background .15s;
+}
+.ctaA-btn:hover { background: #2B2620; color: var(--paper); }
+.ctaA-btn .arr { font-family: var(--mono); font-style: normal; font-size: 14px; }
+.ctaA-meta {
+  margin-top: 8px;
+  padding-top: 18px;
+  border-top: 1px solid var(--rule);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #C97A55;
+}
+
+@media (max-width: 880px) {
+  /* On mobile the three "method" beats pushed the actual contact button
+     ~970px below the heading — the conversion action was buried almost a
+     full screen down. Reorder so the panel (invite + button + email) sits
+     directly under the heading, with the method beats below as supporting
+     detail for anyone who keeps scrolling. */
+  .ctaA {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+  .ctaA-panel { order: -1; }
+  /* Tighten the rhythm between the three steps (like Approach) so the
+     supporting method isn't such a long scroll. */
+  .ctaA-method { gap: 22px; }
+  .ctaA-beat { padding-bottom: 20px; }
+}
+
+/* ─── FOOTER ─── */
+.foot {
+  padding: 36px 0 28px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--margin);
+}
+.foot-inner {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+.foot a { color: var(--margin); }
+.foot a:hover { color: var(--ink); }
+
+/* ─── WHIMSY: drop caps + ornaments ─── */
+.dropcap::first-letter {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 5em;
+  float: left;
+  line-height: 0.85;
+  padding: 6px 10px 0 0;
+  color: var(--accent);
+}
+.ornament {
+  font-family: var(--display);
+  font-style: italic;
+  text-align: center;
+  font-size: 22px;
+  color: var(--accent);
+  letter-spacing: 0.4em;
+  margin: 32px 0 0;
+}
+.marg {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--margin);
+  position: absolute;
+  right: 100%;
+  width: 110px;
+  margin-right: 14px;
+  text-align: right;
+  top: 40px;
+}
+@media (max-width: 980px) { .marg { display: none; } }
+
+/* ─── CREDENTIAL motion variants ─── */
+.cred-mode-fade .cred-track {
+  animation: none;
+  justify-content: center;
+}
+.cred-mode-fade .cred-track > span { display: none; }
+.cred-mode-fade .cred-track > span.is-on { display: inline-flex; animation: fadeUp .6s ease both; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(8px);} to { opacity: 1; transform: translateY(0);} }
+
+.cred-mode-flicker .cred-track > span { animation: flicker 4s steps(1) infinite; }
+@keyframes flicker { 0%, 95%, 100% { opacity: 1;} 96%, 98% { opacity: 0.3;} 97% { opacity: 0.8;}}
+
+/* ─── MARGINALIA — hand-drawn spot illustrations ─────────────
+   Each .marginalia-* is absolutely positioned inside its host
+   section. They live in the gutters and corners, never overlapping
+   body text, and tilt off-grid for a hand-drawn feel.
+
+   Each spot composes three transforms via CSS custom properties:
+     --rot   the at-rest rotation, set per .marginalia-*
+     --dx --dy  drag offset, set inline by the Spot wrapper in JS
+   so the same transform line carries both the design tilt and the
+   user's drag offset, and they don't fight each other.
+
+   pointer-events: auto so the user can grab any spot and drag it
+   to a new home. Opacity rides the Whimsy slider via --whimsy.
+   (Class is .marginalia, not .marg — the latter is already used by
+   an unrelated italic text element elsewhere in this stylesheet.) */
+.marginalia {
+  position: absolute;
+  pointer-events: auto;
+  cursor: grab;
+  z-index: 3;
+  transform: translate(var(--dx, 0px), var(--dy, 0px)) rotate(var(--rot, 0deg));
+  transform-origin: center center;
+  opacity: calc(0.45 + 0.55 * var(--whimsy, 0.6));
+  transition: opacity 240ms ease;
+  user-select: none;
+  touch-action: none;
+  -webkit-user-drag: none;
+}
+.marginalia:hover {
+  opacity: calc(0.55 + 0.55 * var(--whimsy, 0.6));
+}
+.marginalia:active { cursor: grabbing; }
+.marginalia svg { pointer-events: none; }
+/* let illustrations bleed slightly past section edges, like spot
+   art running into the page margin */
+.hero,
+.cred-section,
+.section--testimonials,
+.section--cta,
+.foot {
+  position: relative;
+  overflow: visible;
+}
+.section--catalogue,
+.section--approach,
+.section--services { overflow: visible; }
+
+/* On dark sections (CTA + Credentials), the ink color flips to cream
+   so outlined strokes still read against the black background.
+   Yellow fills stay yellow. */
+.section--cta .marginalia,
+.cred-section .marginalia { --ill-ink: var(--paper); }
+
+/* Hero — eye in the upper-right margin, glancing down toward the
+   masthead. Tucks above the portrait column without crowding it. */
+.marginalia-hero-eye {
+  --rot: -10deg;
+  top: clamp(-12px, 1.5vw, 18px);
+  right: clamp(2%, 4vw, 6%);
+  width: clamp(140px, 14vw, 200px);
+}
+
+/* Credentials — little typewriter in the bottom-left, sitting in
+   the empty space below the "What Sets Me Apart" intro paragraph.
+   (Bottom-right was clipping the credentials list.) */
+.marginalia-cred-typewriter {
+  --rot: -6deg;
+  top: clamp(74px, 8.5vw, 124px);
+  right: clamp(2%, 4vw, 6%);
+  left: auto;
+  bottom: auto;
+  width: clamp(80px, 8vw, 120px);
+}
+
+/* Catalogue — magnifying glass anchored in the section-header
+   negative space, top-right. Same anchor used for every body
+   section so each ornament reads as a section mark rather than
+   a scattered accent. All remain draggable. */
+.marginalia-cat-mag {
+  --rot: 14deg;
+  top: clamp(74px, 8.5vw, 124px);
+  right: clamp(2%, 4vw, 6%);
+  width: clamp(72px, 7.5vw, 108px);
+}
+
+/* Approach — sprout anchored top-right with the others. */
+.marginalia-appr-sprout {
+  --rot: -4deg;
+  top: clamp(74px, 8.5vw, 124px);
+  right: clamp(2%, 4vw, 6%);
+  bottom: auto;
+  left: auto;
+  width: clamp(72px, 7.5vw, 108px);
+}
+.marginalia-appr-eye {
+  --rot: 8deg;
+  top: clamp(40px, 5vw, 90px);
+  right: clamp(2%, 4vw, 6%);
+  width: clamp(95px, 9vw, 130px);
+}
+
+/* Services — filing cabinet, same top-right anchor as the others. */
+.marginalia-svc-cabinet {
+  --rot: -6deg;
+  top: clamp(74px, 8.5vw, 124px);
+  right: clamp(2%, 4vw, 6%);
+  width: clamp(72px, 7.5vw, 108px);
+}
+
+/* Testimonials — ear, same top-right anchor. */
+.marginalia-ts-ear {
+  --rot: -10deg;
+  top: clamp(74px, 8.5vw, 124px);
+  right: clamp(2%, 4vw, 6%);
+  width: clamp(72px, 7.5vw, 108px);
+}
+
+/* CTA — envelope, same top-right anchor as the body sections. */
+.marginalia-cta-env {
+  --rot: -4deg;
+  top: clamp(74px, 8.5vw, 124px);
+  right: clamp(2%, 4vw, 6%);
+  width: clamp(72px, 7.5vw, 108px);
+}
+
+/* Footer — lens with light rays, the page's final clarity mark.
+   Footer is short and densely packed, so we spill the SVG below
+   the footer baseline (.foot has overflow:visible) into the empty
+   page area beneath. Lens body sits at footer-level near the gap
+   between the copyright and "Set in Old Standard" text; rays
+   project down-right into the empty page bottom. */
+.marginalia-foot-lens {
+  --rot: -8deg;
+  bottom: -52px;
+  left: clamp(28%, 32vw, 38%);
+  right: auto;
+  width: clamp(90px, 9vw, 130px);
+  z-index: 2; /* sit behind the footer text, not in front of it */
+}
+
+/* ── Footer lens on the static subpages ──
+   The homepage renders the footer lens through React (draggable + palette
+   aware). The static subpages can't run that, so they carry a fixed,
+   decorative copy in the SAME footer spot. Here we (1) supply the two
+   illustration colours the homepage normally sets from JS, and (2) replay
+   the homepage's baked per-breakpoint offset so the lens lands identically
+   on desktop / tablet / phone. It is purely decorative and never intercepts
+   the footer's Impressum / Datenschutz links. */
+body.subpage .foot-lens-static {
+  --ill-ink: var(--ink);
+  --ill-fill: #E2B23A;
+  --dx: -45px;
+  --dy: -56px;
+  pointer-events: none;
+  cursor: default;
+}
+@media (min-width: 561px) and (max-width: 880px) {
+  body.subpage .foot-lens-static { --dx: 59px; --dy: -94px; }
+}
+@media (max-width: 560px) {
+  body.subpage .foot-lens-static { --dx: 161px; --dy: -135px; }
+}
+
+/* On narrow screens the baked desktop drag offsets are dropped in JS
+   (see useDraggable), so each spot returns to its CSS anchor. We then
+   re-place them all into the top-right divider gutter — straddling the
+   hairline between sections, where the bottom-padding of the previous
+   section and the top-padding of this one guarantee whitespace clear
+   of every heading and body column. They read as small section-divider
+   ornaments rather than scattered accents. */
+@media (max-width: 880px) {
+  .marginalia { cursor: grab; }
+  .marginalia-cat-mag,
+  .marginalia-appr-sprout,
+  .marginalia-svc-diamond,
+  .marginalia-ts-ear,
+  .marginalia-cta-env {
+    top: clamp(-18px, -1.8vw, -12px);
+    right: clamp(12px, 3vw, 20px);
+    bottom: auto;
+    left: auto;
+    width: clamp(52px, 8vw, 66px);
+  }
+  /* Services carries two spots (diamond + cabinet). Both are now
+     positionable on small screens; the cabinet starts offset below
+     the diamond so each is separately grabbable before you drag it
+     into place. */
+  .marginalia-svc-cabinet {
+    top: clamp(64px, 13vw, 120px);
+    right: clamp(12px, 3vw, 20px);
+    bottom: auto;
+    left: auto;
+    width: clamp(52px, 8vw, 66px);
+  }
+  .marginalia-foot-lens { width: clamp(80px, 11vw, 100px); }
+}
+@media (max-width: 560px) {
+  .marginalia { opacity: calc(0.35 + 0.4 * var(--whimsy, 0.6)); }
+}
+
+/* hide whimsy elements when whimsy off */
+.whimsy-off .ornament,
+.whimsy-off .marginalia,
+.whimsy-off .hero-portrait .scribble { display: none; }
+/* Drop cap inherits text color by default. On the dark Credentials
+   section the paragraph is paper-on-ink, so we explicitly re-inherit
+   the cream color there (otherwise it picks up the default accent
+   color used on the lighter Catalogue intro and reads as oxblood
+   against the dark background). */
+/* Drop cap on the dark Credentials section.
+   • Color override: re-inherit the cream paper color so it doesn't
+     pick up the default accent oxblood used on the lighter
+     Catalogue intro.
+   • Padding-bottom override: keeps the M at its default 5em size
+     (same as the Catalogue intro) but extends the float's box
+     downward so the body text wraps for three lines instead of
+     two — meaning the M's bottom edge ends up aligned with the
+     third line's baseline, and the remaining two lines flow
+     under it. */
+.cred-section .dropcap::first-letter {
+  color: var(--paper);
+  padding-bottom: 0.4em;
+}
+.whimsy-off .dropcap::first-letter { all: unset; }
+
+
+/* ─────────────────────────────────────────────────────────────────────
+   Section refinements — applied 2026-05-21
+   1. Catalogue: remove dividers between cards (whitespace-only separation)
+   2. Services: hybrid decoration (fleurons, dashed dividers, italic labels)
+   3. Epigraph block between Approach and Services
+   ───────────────────────────────────────────────────────────────────── */
+
+/* ─── 1. Catalogue: no dividers ───────────────────────────────────── */
+.cat-grid {
+  gap: 8px 36px;          /* horizontal whitespace between the two cards;
+                             a small vertical rhythm between rows */
+}
+.cat-card--grid {
+  border-bottom: 0 !important;
+  border-right: 0 !important;
+  padding: 28px 8px 32px;
+}
+/* Disable the hover-darken behaviour on catalogue cards. With dividers
+   gone, the tinted hover background reads as a snap rather than a
+   gradient cue — and the user finds it distracting. */
+.cat-card--grid:hover,
+.cat-card--full:hover,
+.cat-card:hover { background: transparent; }
+
+/* ─── 2. Services: hybrid decoration ──────────────────────────────── */
+
+/* Solid borders → dashed hairlines.  These selectors mirror the original
+   border declarations so specificity matches; we override colour + style. */
+.m-cell {
+  border-right-style: dashed;
+  border-bottom-style: dashed;
+  border-right-color: var(--rule);
+  border-bottom-color: var(--rule);
+}
+.m-corner {
+  border-right-style: dashed;
+  border-bottom-style: dashed;
+}
+
+/* Fleuron in the corner cell — pure CSS, no JSX change needed. */
+.m-corner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.m-corner::before {
+  content: '\2766';                  /* ❦ */
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 38px;
+  color: var(--accent);
+  opacity: 0.55;
+  line-height: 1;
+}
+
+/* Italic row and column labels. The element is .m-label inside
+   .m-col-head / .m-row-head — currently font-style: normal. */
+.m-col-head .m-label,
+.m-row-head .m-label {
+  font-style: italic;
+}
+
+/* Strip dividers from the axis cells (corner + row heads + column
+   heads). The data cells keep their dashed grid; the labels float
+   above and beside as typography rather than table chrome. */
+.m-corner,
+.m-col-head,
+.m-row-head {
+  border-right: 0 !important;
+  border-bottom: 0 !important;
+}
+
+/* Col heads in the services index are also navigation — each links
+   to its vertical page. The italic label remains the visual anchor;
+   a small mono “Read more →” sits beneath as the affordance, in the
+   same editorial register as the section eyebrows. */
+.m-col-head {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  color: inherit;
+  text-decoration: none;
+}
+.m-col-more {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--margin);
+  transition: color 0.2s ease;
+}
+.m-col-arr {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+.m-col-head:hover .m-col-more,
+.m-col-head.is-hover .m-col-more {
+  color: var(--ink);
+}
+.m-col-head:hover .m-col-arr,
+.m-col-head.is-hover .m-col-arr {
+  transform: translateX(3px);
+}
+
+/* Fleuron prefix on each data item. The list items live in
+   .m-cell.m-data ul li; remove the dotted line BETWEEN items (visual
+   noise) — the cell padding and the dashed cell-borders give enough
+   structure. */
+.m-data li {
+  padding-left: 18px;
+  position: relative;
+  border-bottom: 0 !important;
+}
+.m-data li::before {
+  content: '\2726';                  /* ✦ */
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  color: var(--accent);
+  font-size: 9px;
+  opacity: 0.7;
+  line-height: 1;
+}
+
+/* ─── 3. Epigraph between Approach and Services ──────────────────── */
+.section--epigraph {
+  background: var(--paper);
+  padding: clamp(64px, 8vw, 96px) 0;
+  position: relative;
+}
+.epigraph-container {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 clamp(24px, 4vw, 64px);
+}
+.epigraph-rule {
+  height: 1px;
+  background: var(--rule);
+  margin: 0;
+}
+.epigraph-grid {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 48px;
+  align-items: start;
+  padding: 56px 0;
+}
+.epigraph-side {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-top: 12px;
+}
+.epigraph-mark {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.epigraph-meta { display: flex; flex-direction: column; gap: 3px; }
+.epigraph-who { font-family: var(--display); font-style: italic; font-size: 18px; color: var(--ink); }
+.epigraph-org { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--margin); }
+.epigraph-quote {
+  margin: 0;
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(36px, 4.2vw, 56px);
+  line-height: 1.1;
+  color: var(--ink);
+  max-width: 900px;
+  text-wrap: balance;
+}
+.epigraph-quote::before {
+  content: '\201C';
+  color: var(--accent);
+  opacity: 0.6;
+  font-size: 1.1em;
+  line-height: 0;
+  margin-right: 0.05em;
+}
+.epigraph-quote em { font-style: italic; color: var(--accent); }
+
+@media (max-width: 880px) {
+  .epigraph-grid { grid-template-columns: 1fr; gap: 24px; padding: 36px 0; }
+  .epigraph-side { padding-top: 0; }
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────
+   Clarity Sessions — flagship offering above the services matrix.
+   Designed to NOT read as a wall of text: every block is a different
+   mode (kicker → big italic title → 4 parallel "For X" lines →
+   two-column prose+bullets → quiet italic footnote).
+   ───────────────────────────────────────────────────────────────────── */
+
+.clarity {
+  margin: 0;
+  padding: 0 0 clamp(56px, 7.5vw, 96px);
+  border: 0;
+  position: relative;
+}
+
+/* Header: kicker + title */
+.clarity-head { display: flex; flex-direction: column; gap: 14px; margin-bottom: 36px; }
+.clarity-kicker {
+  font-family: var(--mono);
+  font-size: 11px; letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--margin);
+}
+.clarity-format {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: clamp(18px, 1.6vw, 22px);
+  color: var(--accent);
+  margin-top: 2px;
+}
+.clarity-title {
+  font-family: var(--display);
+  font-weight: 400;
+  font-style: normal;
+  font-size: clamp(38px, 5vw, 64px);
+  line-height: 1.02;
+  margin: 0;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+  color: var(--ink);
+}
+.clarity-title em { font-style: italic; color: var(--accent); }
+
+/* Four parallel "For X..." audience lines, italic display, on their own rows */
+.clarity-audiences {
+  display: flex; flex-direction: column;
+  gap: 6px;
+  margin: 0 0 clamp(48px, 6vw, 80px);
+  max-width: 940px;
+}
+.clarity-audiences li {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(20px, 2.1vw, 26px);
+  line-height: 1.3;
+  color: var(--ink-2);
+  text-wrap: balance;
+}
+.clarity-audiences li em { font-style: italic; color: var(--accent); font-weight: 400; }
+
+
+/* Body: two columns — positioning paragraph + bulleted list of what's involved */
+.clarity-body {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 56px;
+  align-items: start;
+  margin-bottom: 32px;
+}
+.clarity-pitch {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: clamp(15px, 1.2vw, 17px);
+  line-height: 1.6;
+  color: var(--ink-2);
+  text-wrap: pretty;
+  max-width: 60ch;
+}
+.clarity-involves {
+  display: flex; flex-direction: column; gap: 14px;
+}
+.clarity-involves-label {
+  font-family: var(--mono);
+  font-size: 10.5px; letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.clarity-involves ul {
+  display: flex; flex-direction: column; gap: 0;
+}
+.clarity-involves li {
+  font-family: var(--display);
+  font-size: clamp(16px, 1.4vw, 19px);
+  line-height: 1.35;
+  color: var(--ink);
+  padding: 8px 0 8px 22px;
+  position: relative;
+  border-bottom: 1px dotted var(--rule);
+}
+.clarity-involves li:last-child { border-bottom: 0; }
+.clarity-involves li::before {
+  content: '\2726';                  /* ✦ same star as the matrix bullets */
+  position: absolute; left: 0; top: 0.6em;
+  color: var(--accent);
+  font-size: 10px;
+  opacity: 0.85;
+  line-height: 1;
+}
+
+/* Quiet italic footnote about the working document */
+.clarity-deliverable {
+  margin: 0;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: clamp(17px, 1.4vw, 20px);
+  line-height: 1.5;
+  color: var(--ink-2);
+  text-wrap: pretty;
+  max-width: 70ch;
+  padding-top: 24px;
+  border-top: 1px dotted var(--rule);
+}
+
+@media (max-width: 880px) {
+  /* Let the section's own 56px top padding set the gap below the
+     Approach→Services divider, and give Clarity a symmetric 56px bottom
+     so the Clarity→Index hairline sits evenly centred (56 above / 56
+     below) — matching the section-divider rhythm everywhere else. */
+  .clarity { padding: 0 0 56px; }
+  .clarity-body { grid-template-columns: 1fr; gap: 32px; }
+}
+
+
+/* ─── Clarity Sessions bullet/kicker fixes ────────────────────────── */
+/* The .alt-list reset class only exists in alternatives.css, which the
+   live site doesn't load. Reset list styles directly on our lists —
+   but DO NOT touch margin on .clarity-audiences, which has its own
+   bottom margin defined above. */
+.clarity-audiences { list-style: none; padding: 0; }
+.clarity-involves ul { list-style: none; padding: 0; margin: 0; }
+
+
+
+
+/* ─── Services section: split heading model ──────────────────────────
+   The section's kicker (№ 04 / SERVICES) now lives inside the Clarity
+   Sessions block. Below that block, the "Index of services" gets its
+   own quiet sub-section heading with a smaller kicker. */
+.svc-head--index {
+  margin: 0 0 clamp(36px, 4.5vw, 56px);
+  padding-top: clamp(56px, 7.5vw, 96px);
+  border-top: 1px solid var(--ink);
+}
+
+/* ─── Diamond marginalia — flagship marker ───────────────────────────
+   Anchored upper-left of the services section by default. Tilted into
+   the gutter; the user can drag it anywhere via the existing Spot
+   drag system. */
+.marginalia-svc-diamond {
+  --rot: 12deg;
+  top: clamp(200px, 22vw, 300px);
+  right: clamp(2%, 4vw, 6%);
+  left: auto;
+  width: clamp(78px, 8vw, 108px);
+}
+/* Mobile placement: this base rule sits later in the stylesheet than
+   the unified marginalia @media block, so we must re-declare the
+   diamond's narrow-screen placement here (after the base) for it to
+   win by source order — otherwise the desktop top above would leak
+   onto mobile and drop the diamond onto the flagship heading. */
+@media (max-width: 880px) {
+  .marginalia-svc-diamond {
+    top: clamp(-18px, -1.8vw, -12px);
+    right: clamp(12px, 3vw, 20px);
+    left: auto;
+    bottom: auto;
+    width: clamp(52px, 8vw, 66px);
+  }
+}
+
+
+/* ─── Clarity Sessions — teaser variant (home page) ──────────────────
+   The full content lives on clarity-sessions.html. On the home
+   page we show only kicker / title / format / one-sentence pitch /
+   "Read more" link. Same visual DNA as the full block, just shorter. */
+.clarity--teaser {
+  /* the long-form rules (.clarity-audiences, .clarity-body, etc.)
+     are still in this stylesheet so they apply harmlessly to nothing
+     here — the teaser DOM doesn't include those elements. */
+}
+.clarity-teaser-pitch {
+  margin: 0 0 clamp(32px, 4vw, 48px);
+  font-family: var(--display);
+  font-style: italic;
+  font-size: clamp(22px, 2.3vw, 30px);
+  line-height: 1.25;
+  color: var(--ink-2);
+  text-wrap: balance;
+  max-width: 920px;
+}
+.clarity-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 22px 14px 26px;
+  font-family: var(--mono);
+  font-size: 11.5px; letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--paper);
+  background: var(--ink);
+  text-decoration: none;
+  border-radius: 2px;
+  transition: background 180ms ease, transform 180ms ease;
+}
+.clarity-more:hover { background: var(--accent); transform: translateX(2px); }
+.clarity-more-arr {
+  font-family: var(--display);
+  font-size: 18px;
+  letter-spacing: 0;
+  line-height: 1;
+}
+
+
+/* ─── Hero — editorial "feature" callout to the field-notes essay ──
+   A framed callout (kicker + title + arrow) below the hero subtitle.
+   Sized to its own width — never spans the column. Reads as a
+   deliberate sidebar component, not a CTA button. Inverts on hover
+   for clear affordance. */
+.hero-feature {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-top: clamp(28px, 3.4vw, 44px);
+  padding: 10px 16px 12px;
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  text-decoration: none;
+  transition: background 180ms ease;
+}
+.hero-feature-title {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(18px, 1.6vw, 22px);
+  line-height: 1.1;
+  color: var(--paper);
+}
+.hero-feature-arrow {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: clamp(16px, 1.4vw, 20px);
+  color: #C97A55;
+  transition: transform 220ms ease;
+}
+.hero-feature:hover .hero-feature-arrow {
+  transform: translateX(6px);
+}
+
+/* ─── MOBILE / TABLET: horizontal swipe rails (≤880px) ─────────────────
+   On narrow screens the Catalogue (6 work entries) and Testimonials
+   (6 quotes) stacked vertically into an enormous scroll. Below 880px each
+   repeating collection becomes a horizontal scroll-snap rail: one card is
+   read at a time and the rest are a swipe away. Cards bleed to the screen
+   edges (negative gutter margin) for a native feel. Appended last so these
+   win source-order ties over the per-section ≤880 blocks above.
+
+   The swipe hint ("Swipe through the catalogue →") is hidden on desktop. */
+.rail-hint { display: none; }
+
+@media (max-width: 880px) {
+  /* shared rail mechanics */
+  .cat-grid, .cat-list, .ts-grid {
+    display: flex;
+    flex-direction: row;
+    grid-template-columns: none;       /* drop the grid track defs */
+    grid-auto-flow: row;
+    align-items: stretch;
+    overflow-x: auto;
+    overflow-y: visible;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    /* bleed to the viewport edges, then pad back in by one gutter so the
+       first card lines up with the body text above it */
+    margin-inline: calc(var(--gutter) * -1);
+    padding-inline: var(--gutter);
+    padding-block: 4px 18px;
+  }
+  .cat-grid::-webkit-scrollbar,
+  .cat-list::-webkit-scrollbar,
+  .ts-grid::-webkit-scrollbar { display: none; }
+
+  /* ── Catalogue cards as rail items ── */
+  .cat-grid, .cat-list { gap: 14px; }
+  .cat-grid .cat-card,
+  .cat-list .cat-card {
+    flex: 0 0 min(86%, 430px);
+    scroll-snap-align: center;
+    grid-template-columns: 1fr;        /* stack header over content inside */
+    box-sizing: border-box;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    padding: 24px 22px 26px;
+    gap: 16px;
+    background: var(--paper);
+  }
+  .cat-grid .cat-card:hover,
+  .cat-list .cat-card:hover { background: var(--paper); }
+  .cat-grid .cat-left-col { gap: 16px; }
+  .cat-grid .cat-logo,
+  .cat-list .cat-logo { max-width: 120px; }
+  /* kill the desktop 113px description reservation (inline style) so each
+     card is only as tall as its own copy */
+  .cat-desc { height: auto !important; }
+
+  /* ── Testimonial quotes as rail items ── */
+  .ts-grid { gap: 16px; }
+  .ts-grid .ts {
+    flex: 0 0 min(86%, 440px);
+    scroll-snap-align: center;
+    box-sizing: border-box;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    padding: 26px 24px 22px;
+    gap: 14px;
+    background: var(--paper);
+  }
+  .ts.lg, .ts.md, .ts.sm { grid-column: auto; }
+  /* normalise quote size so cards sit at a uniform height in the rail */
+  .ts.lg blockquote,
+  .ts.md blockquote,
+  .ts.sm blockquote { font-size: 22px; line-height: 1.25; }
+  .ts-body { display: none; }          /* supplementary; hide in the rail */
+  /* no hover-dimming on touch */
+  .ts-grid:has(.ts:hover) .ts:not(:hover) { opacity: 1; }
+
+  /* swipe affordance under each rail */
+  .rail-hint {
+    display: block;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--margin);
+    margin-top: 14px;
+    margin-bottom: 0;
+  }
+  .rail-hint span { color: var(--accent); }
+}

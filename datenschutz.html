@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.svg" />
+  <title>Datenschutz · Clarity for Complex Work</title>
+  <meta name="description" content="Datenschutzerklärung · Privacy policy for Clarity for Complex Work, Berlin." />
+
+  <!-- Open Graph / social share -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Clarity for Complex Work" />
+  <meta property="og:title" content="Datenschutz · Clarity for Complex Work" />
+  <meta property="og:description" content="Datenschutzerklärung · Privacy policy for Clarity for Complex Work, Berlin." />
+  <meta property="og:url" content="https://clarityforcomplexwork.com/datenschutz.html" />
+  <meta property="og:image" content="https://clarityforcomplexwork.com/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Datenschutz · Clarity for Complex Work" />
+  <meta name="twitter:description" content="Datenschutzerklärung · Privacy policy for Clarity for Complex Work, Berlin." />
+  <meta name="twitter:image" content="https://clarityforcomplexwork.com/og-image.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Instrument+Serif:ital@0;1&family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* Datenschutz page — minimal subpage that reuses the site palette
+       and font stack, like Impressum.html. Body is set in Space Grotesk
+       (rather than mono uppercase) since the page has substantially
+       more text than the Impressum and needs to be readable. */
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      margin: 0;
+      font-family: var(--serif);
+    }
+    .dat-nav {
+      padding: 16px clamp(20px, 4vw, 48px) 14px;
+      border-bottom: 1px solid var(--ink);
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 12px 24px;
+    }
+    .dat-brand {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-style: italic;
+      font-size: 18px;
+      letter-spacing: 0;
+      text-transform: none;
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .dat-brand em { font-style: italic; }
+    .dat-back {
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .dat-back:hover { text-decoration: underline; }
+    .dat-back .arr { display: inline-block; margin-right: 6px; }
+
+    main.dat-main {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: clamp(72px, 10vw, 120px) clamp(20px, 4vw, 48px);
+      box-sizing: border-box;
+    }
+    .dat-title {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: clamp(56px, 9vw, 112px);
+      font-weight: 400;
+      letter-spacing: -0.012em;
+      margin: 0 0 14px;
+      line-height: 0.96;
+      color: var(--ink);
+    }
+    .dat-stamp {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--margin);
+      margin: 0 0 clamp(48px, 7vw, 72px);
+    }
+    .dat-section-head {
+      font-family: var(--mono);
+      font-size: 11.5px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink);
+      font-weight: 500;
+      margin: clamp(36px, 4vw, 56px) 0 14px;
+      padding-top: 18px;
+      border-top: 1px solid var(--rule);
+    }
+    .dat-section-head:first-of-type {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: 0;
+    }
+    .dat-body {
+      font-family: var(--serif);
+      font-size: 15.5px;
+      line-height: 1.62;
+      color: var(--ink);
+      text-wrap: pretty;
+      margin: 0;
+    }
+    .dat-body p { margin: 0 0 1em; }
+    .dat-body p:last-child { margin: 0; }
+    .dat-body a {
+      color: var(--ink);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .dat-body a:hover { color: var(--accent); }
+
+    .dat-foot {
+      padding: 28px clamp(20px, 4vw, 48px);
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--margin);
+      text-align: center;
+    }
+    .dat-foot a {
+      color: var(--margin);
+      text-decoration: none;
+    }
+    .dat-foot a:hover { color: var(--ink); }
+  </style>
+</head>
+<body>
+  <nav class="dat-nav">
+    <a class="dat-brand" href="index.html">Clarity <em>for</em> Complex Work</a>
+    <a class="dat-back" href="index.html">
+      <span class="arr">←</span> Zurück / Back
+    </a>
+  </nav>
+
+  <main class="dat-main">
+    <h1 class="dat-title">Datenschutz.</h1>
+    <p class="dat-stamp">Stand: Mai 2026</p>
+
+    <h2 class="dat-section-head">§ 1 — Verantwortlicher</h2>
+    <div class="dat-body">
+      <p>
+        Matteo Calla<br/>
+        Libauerstrasse 12<br/>
+        10245 Berlin, Deutschland<br/>
+        E-Mail: <a href="mailto:matteo@clarityforcomplexwork.com">matteo@clarityforcomplexwork.com</a>
+      </p>
+    </div>
+
+    <h2 class="dat-section-head">§ 2 — Erhebung personenbezogener Daten</h2>
+    <div class="dat-body">
+      <p>Diese Website ist eine reine Informationswebsite. Sie enthält keine Kontaktformulare, keine Newsletter-Anmeldung und keine Login- oder Mitgliederbereiche. Eine Erhebung oder Speicherung personenbezogener Daten durch die Website selbst findet nicht statt.</p>
+    </div>
+
+    <h2 class="dat-section-head">§ 3 — Server-Logfiles</h2>
+    <div class="dat-body">
+      <p>Beim Aufruf der Website werden durch den Hosting-Anbieter automatisch Daten in sogenannten Server-Logfiles gespeichert (IP-Adresse, Datum und Uhrzeit der Anfrage, aufgerufene Seite, Referrer-URL, verwendeter Browser und Betriebssystem). Diese Daten werden ausschliesslich zur Sicherstellung des Betriebs und der Sicherheit der Website verarbeitet (Art. 6 Abs. 1 lit. f DSGVO) und nach kurzer Zeit automatisch gelöscht.</p>
+    </div>
+
+    <h2 class="dat-section-head">§ 4 — Cookies</h2>
+    <div class="dat-body">
+      <p>Diese Website verwendet keine Cookies.</p>
+    </div>
+
+    <h2 class="dat-section-head">§ 5 — Externe Dienste (Google Fonts)</h2>
+    <div class="dat-body">
+      <p>Zur einheitlichen Darstellung der Schriftarten werden auf dieser Website Web Fonts von Google Fonts geladen (Anbieter: Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland). Beim Aufruf der Website wird hierzu eine Verbindung zu Servern von Google aufgebaut und Ihre IP-Adresse an Google übertragen. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an einer einheitlichen Darstellung).</p>
+    </div>
+
+    <h2 class="dat-section-head">§ 6 — Webanalyse (Cloudflare Web Analytics)</h2>
+    <div class="dat-body">
+      <p>Zur statistischen Auswertung der Zugriffe nutzt diese Website Cloudflare Web Analytics, einen Dienst der Cloudflare, Inc. (101 Townsend Street, San Francisco, CA 94107, USA). Cloudflare Web Analytics arbeitet cookiefrei und ohne Wiedererkennung einzelner Besucher: Es werden keine Cookies gesetzt, keine personenbezogenen Nutzungsprofile erstellt und keine Daten geräteübergreifend zusammengeführt. Erfasst werden ausschliesslich aggregierte Kennzahlen wie aufgerufene Seiten, Referrer-URL, die ungefähre geografische Herkunft (Land) sowie der verwendete Browser- und Gerätetyp. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an einer datenschutzfreundlichen Reichweitenmessung). Da keine Cookies verwendet und keine personenbezogenen Daten verarbeitet werden, ist hierfür keine Einwilligung erforderlich. Weitere Informationen finden Sie unter <a href="https://www.cloudflare.com/web-analytics/">cloudflare.com/web-analytics</a> sowie in der Datenschutzerklärung von Cloudflare unter <a href="https://www.cloudflare.com/privacypolicy/">cloudflare.com/privacypolicy</a>.</p>
+    </div>
+
+    <h2 class="dat-section-head">§ 7 — Kontakt per E-Mail</h2>
+    <div class="dat-body">
+      <p>Wenn Sie per E-Mail Kontakt aufnehmen, werden Ihre Angaben (E-Mail-Adresse, gegebenenfalls Name und Nachrichteninhalt) ausschliesslich zur Bearbeitung Ihrer Anfrage gespeichert. Eine Weitergabe an Dritte erfolgt nicht. Nach Abschluss der Korrespondenz werden die Daten gelöscht, sofern keine gesetzlichen Aufbewahrungspflichten bestehen.</p>
+    </div>
+
+    <h2 class="dat-section-head">§ 8 — Ihre Rechte</h2>
+    <div class="dat-body">
+      <p>Sie haben jederzeit das Recht auf Auskunft über die zu Ihrer Person gespeicherten Daten (Art. 15 DSGVO) sowie auf Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung der Verarbeitung (Art. 18), Datenübertragbarkeit (Art. 20) und Widerspruch (Art. 21). Beschwerden können Sie an die zuständige Datenschutzaufsichtsbehörde richten.</p>
+    </div>
+
+    <h2 class="dat-section-head">§ 9 — Änderungen dieser Erklärung</h2>
+    <div class="dat-body">
+      <p>Diese Datenschutzerklärung kann von Zeit zu Zeit angepasst werden, um geänderten rechtlichen Anforderungen oder Änderungen der angebotenen Dienste Rechnung zu tragen.</p>
+    </div>
+  </main>
+
+  <footer class="dat-foot">
+    © 2026 · Clarity for Complex Work · <a href="impressum.html">Impressum</a>
+  </footer>
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "dcd0d2cc7058401081019d607f569e5e"}'></script>
+  <!-- End Cloudflare Web Analytics -->
+</body>
+</html>
