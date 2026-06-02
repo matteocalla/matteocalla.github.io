@@ -1058,7 +1058,13 @@ body:not(.cs-page) .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
 .hero-eyebrow .he-vol { color: var(--margin); }
 .hero-grid {
   display: grid;
-  grid-template-columns: 1.15fr 1fr;
+  /* minmax(0, …) caps each track to its flex fraction so neither column can
+     be pushed wider by its content's intrinsic size. Without this, on a cold
+     load the 3024×4032 portrait's intrinsic width can momentarily blow out
+     the right track before the image settles into its absolutely-positioned
+     box — stealing width from the left column and wrapping the CTA buttons
+     onto a second row. */
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
   gap: clamp(28px, 5vw, 72px);
   align-items: stretch;
 }
@@ -2682,8 +2688,8 @@ body:not(.cs-page) .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
    an unrelated italic text element elsewhere in this stylesheet.) */
 .marginalia {
   position: absolute;
-  pointer-events: auto;
-  cursor: grab;
+  pointer-events: none;
+  cursor: default;
   z-index: 3;
   transform: translate(var(--dx, 0px), var(--dy, 0px)) rotate(var(--rot, 0deg));
   transform-origin: center center;
@@ -2696,7 +2702,7 @@ body:not(.cs-page) .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
 .marginalia:hover {
   opacity: calc(0.55 + 0.55 * var(--whimsy, 0.6));
 }
-.marginalia:active { cursor: grabbing; }
+.marginalia:active { cursor: default; }
 .marginalia svg { pointer-events: none; }
 /* let illustrations bleed slightly past section edges, like spot
    art running into the page margin */

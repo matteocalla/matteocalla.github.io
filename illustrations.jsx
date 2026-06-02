@@ -115,10 +115,10 @@ function defaultPosFor(id, mode) {
 }
 
 function loadPosFor(id, mode) {
-  try {
-    const raw = localStorage.getItem(posKey(id, mode));
-    if (raw) return JSON.parse(raw);
-  } catch (e) {}
+  // Always use the baked default for the current breakpoint. (Dragging is
+  // disabled, so we intentionally ignore any stale per-visitor positions a
+  // previous build may have saved to localStorage — everyone sees the same
+  // locked layout.)
   return defaultPosFor(id, mode);
 }
 
@@ -195,14 +195,14 @@ function useDraggable(id) {
   };
 }
 
-function Spot({ id, posClass, children, title }) {
-  const { style, handlers } = useDraggable(id);
+function Spot({ id, posClass, children }) {
+  // Dragging is disabled on the live site — the spots are decorative and
+  // locked to their baked positions. useDraggable still supplies the
+  // position style (and tracks breakpoint changes); we simply don't wire
+  // up the pointer handlers, and CSS makes them pointer-events:none.
+  const { style } = useDraggable(id);
   return (
-    <div
-      className={`marginalia ${posClass}`}
-      style={style}
-      title={title || "Drag to reposition"}
-      {...handlers}>
+    <div className={`marginalia ${posClass}`} style={style} aria-hidden="true">
       {children}
     </div>
   );
