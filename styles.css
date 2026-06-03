@@ -27,6 +27,13 @@
 
   --maxw: 1280px;
   --gutter: clamp(20px, 4vw, 56px);
+  /* Distance from a viewport edge to the matching edge of a FIXED, centered
+     1280px design frame (not the fluid column). Resolves to 50vw - 584px, so
+     a spot's anchor is the same distance from screen-center at EVERY width —
+     marginalia stay put whether the window is partial or full screen, and on
+     any size monitor. Above 1280 this equals the real content edge; below it
+     the frame extends off-screen (clipped by overflow-x on body). */
+  --marg-edge: calc((100vw - var(--maxw)) / 2 + 56px);
 }
 
 * { box-sizing: border-box; }
@@ -34,6 +41,11 @@
 html, body {
   margin: 0;
   padding: 0;
+  /* Clip horizontal overflow only: marginalia anchor to a fixed 1280 frame
+     that extends off-screen on narrow windows; clip stops that from spawning
+     a horizontal scrollbar. (clip, not hidden, so it never creates a scroll
+     container or breaks any future sticky positioning.) */
+  overflow-x: clip;
   background: var(--paper);
   color: var(--ink);
   font-family: var(--serif);
@@ -247,11 +259,11 @@ body.subpage {
    the verticals) so the page opens with both a face and a
    sentence. */
 .sp-hero {
-  padding: clamp(40px, 5.5vw, 76px) 0 clamp(48px, 7vw, 96px);
+  padding: clamp(44px, 5vw, 68px) 0;
   border-bottom: 1px solid var(--rule);
 }
 .sp-hero .hero-eyebrow {
-  margin-bottom: clamp(52px, 7vw, 84px);
+  margin-bottom: clamp(36px, 4vw, 56px);
 }
 .sp-hero-grid {
   display: grid;
@@ -260,6 +272,11 @@ body.subpage {
   align-items: end;
 }
 .sp-hero-text { padding-bottom: 8px; }
+/* About hero (2-column .sp-hero-grid, align-items:end): the 8px above lifts
+   the standfirst's last line off the image's bottom edge. Zero it here so
+   the subtitle bottom lines up flush with the portrait bottom on desktop +
+   tablet. (Scoped to the grid so the text-only subpage heroes keep the 8px.) */
+.sp-hero-grid .sp-hero-text { padding-bottom: 0; }
 .sp-title {
   font-family: 'Instrument Serif', 'Old Standard TT', Georgia, serif;
   font-weight: 400;
@@ -287,11 +304,11 @@ body.subpage {
    hero with a partial rule that spans only the title block, and tighten
    the drop into the first section so it no longer reads as the same big
    canyon used before the dark CTA. */
-body:not(.cs-page) .sp-hero:has(> .container > .sp-hero-text) {
+body .sp-hero:has(> .container > .sp-hero-text) {
   border-bottom: 0;
-  padding-bottom: clamp(26px, 3.2vw, 44px);
+  padding-bottom: clamp(12px, 1.4vw, 20px);
 }
-body:not(.cs-page) .sp-hero > .container > .sp-hero-text::after {
+body .sp-hero > .container > .sp-hero-text::after {
   content: "";
   display: block;
   width: clamp(240px, 46vw, 600px);
@@ -300,8 +317,8 @@ body:not(.cs-page) .sp-hero > .container > .sp-hero-text::after {
   background: var(--rule);
   margin-top: clamp(20px, 2.4vw, 32px);
 }
-body:not(.cs-page) .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
-  padding-top: clamp(28px, 3.4vw, 48px);
+body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
+  padding-top: clamp(14px, 1.6vw, 22px);
 }
 
 /* Hero figure — wraps either the real <img> or a placeholder
@@ -339,7 +356,7 @@ body:not(.cs-page) .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
 
 /* SECTION — generic editorial section between hero and CTA. */
 .sp-section {
-  padding: clamp(56px, 7.5vw, 104px) 0;
+  padding: clamp(44px, 5vw, 68px) 0;
   border-bottom: 1px solid var(--rule);
 }
 .sp-section:last-of-type { border-bottom: 0; }
@@ -801,7 +818,7 @@ body:not(.cs-page) .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
 .sp-flagship {
   background: var(--paper-2);
   color: var(--ink);
-  padding: clamp(64px, 8vw, 104px) 0;
+  padding: clamp(44px, 5vw, 68px) 0;
   border-top: 1px solid var(--ink);
   border-bottom: 1px solid var(--ink);
 }
@@ -811,7 +828,7 @@ body:not(.cs-page) .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
 }
 .sp-flagship-grid {
   display: grid;
-  grid-template-columns: 1.6fr 1fr;
+  grid-template-columns: 1.4fr 1fr;
   gap: clamp(36px, 5vw, 80px);
   align-items: start;
 }
@@ -875,15 +892,15 @@ body:not(.cs-page) .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
    marginalia next to the main pitch. */
 .sp-flagship-aside {
   border-top: 1px solid var(--ink);
-  padding-top: 18px;
+  padding-top: 24px;
 }
 .sp-flagship-aside-label {
   font-family: var(--mono);
-  font-size: 10.5px;
+  font-size: 12px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--margin);
-  margin: 0 0 14px;
+  color: var(--ink);
+  margin: 0 0 18px;
 }
 .sp-flagship-aside ul {
   margin: 0;
@@ -891,15 +908,15 @@ body:not(.cs-page) .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
 }
 .sp-flagship-aside li {
   font-family: var(--display);
   font-style: italic;
-  font-size: clamp(16px, 1.25vw, 19px);
-  line-height: 1.35;
+  font-size: clamp(18px, 1.5vw, 23px);
+  line-height: 1.4;
   color: var(--ink);
-  padding-left: 18px;
+  padding-left: 20px;
   position: relative;
 }
 .sp-flagship-aside li::before {
@@ -912,12 +929,12 @@ body:not(.cs-page) .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
   font-size: 0.72em;
 }
 .sp-flagship-format {
-  margin: 22px 0 0;
+  margin: 26px 0 0;
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--margin);
+  color: var(--ink);
 }
 .sp-flagship-format span { color: var(--ink); opacity: 1; }
 
@@ -929,7 +946,7 @@ body:not(.cs-page) .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
 .sp-cta {
   background: var(--ink);
   color: var(--paper);
-  padding: clamp(56px, 7.5vw, 104px) 0;
+  padding: clamp(44px, 5vw, 68px) 0;
 }
 .sp-cta-grid {
   display: grid;
@@ -1030,7 +1047,7 @@ body:not(.cs-page) .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
 
 /* ─── HERO / MASTHEAD ─── */
 .hero {
-  padding: clamp(56px, 7.5vw, 96px) 0;
+  padding: clamp(44px, 5vw, 68px) 0;
   border-bottom: 1px solid var(--ink);
   position: relative;
 }
@@ -1383,8 +1400,23 @@ body:not(.cs-page) .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
    collapses to a single stacked column on actual phones (≤560px), where
    the eyebrow/CTA/portrait mobile rules above already take over. */
 @media (max-width: 560px) {
-  .hero-grid { grid-template-columns: 1fr; }
-  .hero-portrait { max-width: 480px; aspect-ratio: 4/5; }
+  /* Mobile hero order: pitch → portrait → name → actions. The two CTA
+     buttons move BELOW "Matteo Calla / Founder" so they close the hero
+     rather than splitting the title/subtitle from the portrait. The two
+     column wrappers become display:contents so the title, subtitle,
+     portrait, nameplate and CTA row are all direct flex items of the
+     hero grid and can be reordered. (Desktop + tablet are untouched.) */
+  .hero-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .hero .hero-grid > div { display: contents; }
+  .hero-title { order: 1; }
+  .hero-sub { order: 2; }
+  .hero-portrait { order: 3; max-width: 480px; aspect-ratio: 4/5; }
+  .hero-nameplate { order: 4; }
+  .hero-cta-row { order: 5; margin-top: 22px; }
 }
 
 /* Two-column hero (tablet + desktop): line up the bottom of the CTA
@@ -1414,7 +1446,7 @@ body:not(.cs-page) .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
   background: var(--ink);
   color: var(--paper);
   border-bottom: 1px solid var(--ink);
-  padding: clamp(56px, 7.5vw, 96px) 0;
+  padding: clamp(44px, 5vw, 68px) 0;
 }
 .cred-grid {
   display: grid;
@@ -1533,14 +1565,12 @@ body:not(.cs-page) .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
 
 /* ─── SECTION HEADERS ─── */
 .section {
-  padding: clamp(56px, 7.5vw, 96px) 0;
+  padding: clamp(44px, 5vw, 68px) 0;
   border-bottom: 1px solid var(--ink);
 }
 .sec-head {
   display: block;
   margin-bottom: clamp(36px, 5vw, 60px);
-  padding-bottom: 18px;
-  border-bottom: 1px solid var(--rule);
 }
 /* The bottom-most text element inside any section head should not carry
    its own bottom margin — the gap from text to the grey rule is exactly
@@ -1652,7 +1682,7 @@ body:not(.cs-page) .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
   line-height: 1.1;
   margin-bottom: 10px;
 }
-.cat-card--grid .cat-desc { font-size: 15px; line-height: 1.5; margin-bottom: 16px; }
+.cat-card--grid .cat-desc { font-size: 15px; line-height: 1.5; margin-bottom: 0; }
 .cat-card--grid .cat-tagline { gap: 4px 8px; margin-bottom: 8px; }
 .cat-card--grid .cat-client-type { font-size: 10px; }
 .cat-card--grid .cat-client { font-size: 16px; }
@@ -1922,7 +1952,7 @@ body:not(.cs-page) .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
 /* Approach now uses default .sec-head spacing for cross-section
    consistency. */
 .appr-col {
-  padding: 44px 36px 44px 0;
+  padding: 0 36px 0 0;
   border-right: 1px solid var(--rule);
 }
 .appr-col:last-child { border-right: 0; padding-right: 0; }
@@ -1990,8 +2020,6 @@ body:not(.cs-page) .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
   gap: 32px;
   align-items: baseline;
   margin-bottom: clamp(36px, 5vw, 60px);
-  padding-bottom: 18px;
-  border-bottom: 1px solid var(--rule);
 }
 .svc-head .sec-num {
   font-family: var(--mono);
@@ -2478,12 +2506,9 @@ body:not(.cs-page) .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
 .section--cta {
   background: var(--ink);
   color: var(--paper);
-  padding-top: clamp(56px, 7.5vw, 96px);
-  padding-bottom: clamp(56px, 7.5vw, 96px);
+  padding-top: clamp(44px, 5vw, 68px);
+  padding-bottom: clamp(44px, 5vw, 68px);
   border-bottom: 0;
-}
-.section--cta .sec-head {
-  border-bottom-color: rgba(250,244,230,0.22);
 }
 .section--cta .sec-num { color: rgba(250,244,230,0.55); }
 .section--cta .sec-title { color: var(--paper); }
@@ -2728,9 +2753,9 @@ body:not(.cs-page) .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
    masthead. Tucks above the portrait column without crowding it. */
 .marginalia-hero-eye {
   --rot: -10deg;
-  top: clamp(-12px, 1.5vw, 18px);
-  right: clamp(2%, 4vw, 6%);
-  width: clamp(140px, 14vw, 200px);
+  top: 18px;
+  right: var(--marg-edge);
+  width: 200px;
 }
 
 /* Credentials — little typewriter in the bottom-left, sitting in
@@ -2738,11 +2763,11 @@ body:not(.cs-page) .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
    (Bottom-right was clipping the credentials list.) */
 .marginalia-cred-typewriter {
   --rot: -6deg;
-  top: clamp(74px, 8.5vw, 124px);
-  right: clamp(2%, 4vw, 6%);
+  top: 124px;
+  right: var(--marg-edge);
   left: auto;
   bottom: auto;
-  width: clamp(80px, 8vw, 120px);
+  width: 120px;
 }
 
 /* Catalogue — magnifying glass anchored in the section-header
@@ -2751,49 +2776,49 @@ body:not(.cs-page) .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
    a scattered accent. All remain draggable. */
 .marginalia-cat-mag {
   --rot: 14deg;
-  top: clamp(74px, 8.5vw, 124px);
-  right: clamp(2%, 4vw, 6%);
-  width: clamp(72px, 7.5vw, 108px);
+  top: 124px;
+  right: var(--marg-edge);
+  width: 108px;
 }
 
 /* Approach — sprout anchored top-right with the others. */
 .marginalia-appr-sprout {
   --rot: -4deg;
-  top: clamp(74px, 8.5vw, 124px);
-  right: clamp(2%, 4vw, 6%);
+  top: 124px;
+  right: var(--marg-edge);
   bottom: auto;
   left: auto;
-  width: clamp(72px, 7.5vw, 108px);
+  width: 108px;
 }
 .marginalia-appr-eye {
   --rot: 8deg;
-  top: clamp(40px, 5vw, 90px);
-  right: clamp(2%, 4vw, 6%);
-  width: clamp(95px, 9vw, 130px);
+  top: 90px;
+  right: var(--marg-edge);
+  width: 130px;
 }
 
 /* Services — filing cabinet, same top-right anchor as the others. */
 .marginalia-svc-cabinet {
   --rot: -6deg;
-  top: clamp(74px, 8.5vw, 124px);
-  right: clamp(2%, 4vw, 6%);
-  width: clamp(72px, 7.5vw, 108px);
+  top: 124px;
+  right: var(--marg-edge);
+  width: 108px;
 }
 
 /* Testimonials — ear, same top-right anchor. */
 .marginalia-ts-ear {
   --rot: -10deg;
-  top: clamp(74px, 8.5vw, 124px);
-  right: clamp(2%, 4vw, 6%);
-  width: clamp(72px, 7.5vw, 108px);
+  top: 124px;
+  right: var(--marg-edge);
+  width: 108px;
 }
 
 /* CTA — envelope, same top-right anchor as the body sections. */
 .marginalia-cta-env {
   --rot: -4deg;
-  top: clamp(74px, 8.5vw, 124px);
-  right: clamp(2%, 4vw, 6%);
-  width: clamp(72px, 7.5vw, 108px);
+  top: 124px;
+  right: var(--marg-edge);
+  width: 108px;
 }
 
 /* Footer — lens with light rays, the page's final clarity mark.
@@ -2805,9 +2830,9 @@ body:not(.cs-page) .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
 .marginalia-foot-lens {
   --rot: -8deg;
   bottom: -52px;
-  left: clamp(28%, 32vw, 38%);
+  left: calc(var(--marg-edge) + 360px);
   right: auto;
-  width: clamp(90px, 9vw, 130px);
+  width: 130px;
   z-index: 2; /* sit behind the footer text, not in front of it */
 }
 
@@ -2822,16 +2847,16 @@ body:not(.cs-page) .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
 body.subpage .foot-lens-static {
   --ill-ink: var(--ink);
   --ill-fill: #E2B23A;
-  --dx: -45px;
-  --dy: -56px;
+  --dx: -90px;
+  --dy: -52px;
   pointer-events: none;
   cursor: default;
 }
 @media (min-width: 561px) and (max-width: 880px) {
-  body.subpage .foot-lens-static { --dx: 59px; --dy: -94px; }
+  body.subpage .foot-lens-static { --dx: 136px; --dy: -82px; }
 }
 @media (max-width: 560px) {
-  body.subpage .foot-lens-static { --dx: 161px; --dy: -135px; }
+  body.subpage .foot-lens-static { --dx: 317px; --dy: -137px; }
 }
 
 /* On narrow screens the baked desktop drag offsets are dropped in JS
@@ -2869,6 +2894,16 @@ body.subpage .foot-lens-static {
 }
 @media (max-width: 560px) {
   .marginalia { opacity: calc(0.35 + 0.4 * var(--whimsy, 0.6)); }
+}
+
+/* 881–1279px — partial desktop windows. The desktop layout's intra-column
+   whitespace (where the spots live) collapses here, so the marginalia would
+   sit on the body text. They're full-desktop spot art: hide them in this
+   in-between band. They return at ≥1280 (the placed positions) and at ≤880
+   (the gutter/divider treatment above), which covers maximised desktops and
+   phones — the way the site is actually viewed. */
+@media (min-width: 881px) and (max-width: 1279px) {
+  .marginalia { display: none; }
 }
 
 /* hide whimsy elements when whimsy off */
@@ -2983,10 +3018,10 @@ body.subpage .foot-lens-static {
 }
 .m-col-more {
   font-family: var(--mono);
-  font-size: 10.5px;
-  letter-spacing: 0.22em;
+  font-size: 11px;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--margin);
+  color: var(--accent);
   transition: color 0.2s ease;
 }
 .m-col-arr {
@@ -2995,7 +3030,15 @@ body.subpage .foot-lens-static {
 }
 .m-col-head:hover .m-col-more,
 .m-col-head.is-hover .m-col-more {
-  color: var(--ink);
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--accent);
+  text-underline-offset: 0.35em;
+}
+.m-col-head:hover .m-label,
+.m-col-head.is-hover .m-label {
+  color: var(--accent);
 }
 .m-col-head:hover .m-col-arr,
 .m-col-head.is-hover .m-col-arr {
@@ -3097,7 +3140,7 @@ body.subpage .foot-lens-static {
 
 .clarity {
   margin: 0;
-  padding: 0 0 clamp(56px, 7.5vw, 96px);
+  padding: 0 0 clamp(44px, 5vw, 68px);
   border: 0;
   position: relative;
 }
@@ -3238,8 +3281,8 @@ body.subpage .foot-lens-static {
    own quiet sub-section heading with a smaller kicker. */
 .svc-head--index {
   margin: 0 0 clamp(36px, 4.5vw, 56px);
-  padding-top: clamp(56px, 7.5vw, 96px);
-  border-top: 1px solid var(--ink);
+  padding-top: clamp(44px, 5vw, 68px);
+  border-top: 1px solid var(--rule);
 }
 
 /* ─── Diamond marginalia — flagship marker ───────────────────────────
@@ -3248,10 +3291,10 @@ body.subpage .foot-lens-static {
    drag system. */
 .marginalia-svc-diamond {
   --rot: 12deg;
-  top: clamp(200px, 22vw, 300px);
-  right: clamp(2%, 4vw, 6%);
+  top: 260px;
+  right: var(--marg-edge);
   left: auto;
-  width: clamp(78px, 8vw, 108px);
+  width: 108px;
 }
 /* Mobile placement: this base rule sits later in the stylesheet than
    the unified marginalia @media block, so we must re-declare the
