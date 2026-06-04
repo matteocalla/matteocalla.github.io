@@ -2004,6 +2004,12 @@ body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
     border-bottom: 1px solid var(--rule);
     padding: 28px 0;
   }
+  /* When stacked, the grid no longer supplies a column measure, so the head
+     and body have nothing to wrap against and run the full viewport width
+     (worst in landscape / on tablets). Cap them to a readable measure; the
+     act divider (.appr-col border) still spans full width. On a portrait
+     phone the column is already narrower than this, so it's a no-op there. */
+  .appr-head, .appr-body { max-width: 30rem; }
   /* tighten the label/head rhythm on mobile so each act reads as a compact
      beat and the three-part stack isn't such a long scroll */
   .appr-lbl { margin-bottom: 14px; }
@@ -3164,7 +3170,7 @@ body.subpage .foot-lens-static {
   font-family: var(--display);
   font-weight: 400;
   font-style: normal;
-  font-size: clamp(38px, 5vw, 64px);
+  font-size: clamp(36px, 5vw, 64px);
   line-height: 1.02;
   margin: 0;
   letter-spacing: -0.01em;
@@ -3172,6 +3178,10 @@ body.subpage .foot-lens-static {
   color: var(--ink);
 }
 .clarity-title em { font-style: italic; color: var(--accent); }
+/* Subtitle break: off by default (desktop/tablet wrap naturally), forced
+   on phones so the heading is reliably three lines. */
+.cs-sub-break { display: none; }
+@media (max-width: 560px) { .cs-sub-break { display: inline; } }
 
 /* Four parallel "For X..." audience lines, italic display, on their own rows */
 .clarity-audiences {
@@ -3308,6 +3318,18 @@ body.subpage .foot-lens-static {
     left: auto;
     bottom: auto;
     width: clamp(52px, 8vw, 66px);
+  }
+}
+/* Phone (≤560): LEFT-anchor the diamond so its offset (baked or dragged)
+   tracks the left-aligned "Core Narrative" line it crowns and stays put
+   across phone widths, rather than drifting with the right edge. The
+   actual placement comes from the translate offset (--dx/--dy). */
+@media (max-width: 560px) {
+  .marginalia-svc-diamond {
+    top: 0;
+    left: 0;
+    right: auto;
+    bottom: auto;
   }
 }
 

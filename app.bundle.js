@@ -1,3 +1,4 @@
+function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 const {
   useState,
   useEffect,
@@ -710,8 +711,8 @@ const MOBILE_POS = {
     dy: 92
   },
   "svc-diamond": {
-    dx: -55,
-    dy: 73
+    dx: 273,
+    dy: 105
   },
   "svc-catalog": {
     dx: -55,
@@ -739,7 +740,7 @@ function currentMode() {
   return "desktop";
 }
 function posKey(id, mode) {
-  return mode === "desktop" ? "marg-pos2-" + id : "marg-pos2-" + mode + "-" + id;
+  return mode === "desktop" ? "marg-pos3-" + id : "marg-pos3-" + mode + "-" + id;
 }
 function defaultPosFor(id, mode) {
   if (mode === "desktop") return defaultPos(id);
@@ -752,12 +753,21 @@ function defaultPosFor(id, mode) {
     dy: 0
   };
 }
-function loadPosFor(id, mode) {
+function loadPosFor(id, mode, placing) {
+  if (placing) {
+    try {
+      const raw = localStorage.getItem(posKey(id, mode));
+      if (raw) {
+        const p = JSON.parse(raw);
+        if (p && typeof p.dx === "number" && typeof p.dy === "number") return p;
+      }
+    } catch (e) {}
+  }
   return defaultPosFor(id, mode);
 }
-function useDraggable(id) {
+function useDraggable(id, placing) {
   const [mode, setMode] = useState(() => currentMode());
-  const [pos, setPos] = useState(() => loadPosFor(id, currentMode()));
+  const [pos, setPos] = useState(() => loadPosFor(id, currentMode(), placing));
   const posRef = useRef(pos);
   posRef.current = pos;
   const modeRef = useRef(mode);
@@ -769,7 +779,7 @@ function useDraggable(id) {
     const onChange = () => {
       const m = currentMode();
       setMode(m);
-      setPos(loadPosFor(id, m));
+      setPos(loadPosFor(id, m, placing));
     };
     mqs.forEach(mq => mq.addEventListener ? mq.addEventListener("change", onChange) : mq.addListener(onChange));
     return () => mqs.forEach(mq => mq.removeEventListener ? mq.removeEventListener("change", onChange) : mq.removeListener(onChange));
@@ -844,16 +854,25 @@ function useDraggable(id) {
 function Spot({
   id,
   posClass,
-  children
+  children,
+  placing
 }) {
   const {
-    style
-  } = useDraggable(id);
-  return React.createElement("div", {
+    style,
+    handlers
+  } = useDraggable(id, placing);
+  const placingStyle = placing ? {
+    ...style,
+    pointerEvents: "auto",
+    cursor: "grab",
+    touchAction: "none"
+  } : style;
+  return React.createElement("div", _extends({
     className: `marginalia ${posClass}`,
-    style: style,
+    style: placingStyle
+  }, placing ? handlers : {}, {
     "aria-hidden": "true"
-  }, children);
+  }), children);
 }
 function resetAllMarginalia() {
   window.dispatchEvent(new Event("marginalia:reset"));
@@ -1814,7 +1833,13 @@ function ClaritySessions({
     className: "clarity-kicker"
   }, data.sectionKicker), React.createElement("h3", {
     className: "clarity-title"
-  }, data.title, React.createElement("br", null), React.createElement("em", null, data.subtitle)), React.createElement("div", {
+  }, data.title, React.createElement("br", null), React.createElement("em", null, (() => {
+    const w = String(data.subtitle).trim().split(/\s+/);
+    if (w.length <= 2) return data.subtitle;
+    return React.createElement(React.Fragment, null, w.slice(0, -2).join(" "), React.createElement("br", {
+      className: "cs-sub-break"
+    }), " " + w.slice(-2).join(" "));
+  })())), React.createElement("div", {
     className: "clarity-format"
   }, data.format)), React.createElement("p", {
     className: "clarity-teaser-pitch"
