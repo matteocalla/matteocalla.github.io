@@ -28,16 +28,625 @@
     rel="stylesheet"
   />
   <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* Baked marginalia offsets per breakpoint. On the live site the spot
+       illustrations are pinned (not draggable), so the per-breakpoint
+       offsets the old React app applied via JS now live here as CSS. The
+       at-rest tilt (--rot) and edge anchor (top/right) still come from the
+       .marginalia-* rules in styles.css; these only set the translate. */
+    .marginalia-cat-mag     { --dx: -482px; --dy: -15px; }
+    .marginalia-appr-sprout { --dx: -493px; --dy: -29px; }
+    .marginalia-svc-diamond { --dx: -483px; --dy: -167px; }
+    .marginalia-svc-cabinet { --dx: -494px; --dy: 519px; }
+    .marginalia-ts-ear      { --dx: -488px; --dy: -17px; }
+    .marginalia-cta-env     { --dx: -501px; --dy: 10px; }
+    .marginalia-foot-lens   { --dx: -90px;  --dy: -52px; }
+    @media (min-width: 561px) and (max-width: 880px) {
+      .marginalia-cat-mag     { --dx: -285px; --dy: 106px; }
+      .marginalia-appr-sprout { --dx: -284px; --dy: 94px; }
+      .marginalia-svc-diamond { --dx: -281px; --dy: 75px; }
+      .marginalia-svc-cabinet { --dx: -278px; --dy: 379px; }
+      .marginalia-ts-ear      { --dx: -282px; --dy: 100px; }
+      .marginalia-cta-env     { --dx: -280px; --dy: 117px; }
+      .marginalia-foot-lens   { --dx: 136px;  --dy: -82px; }
+    }
+    @media (max-width: 560px) {
+      .marginalia-cat-mag     { --dx: -58px; --dy: 105px; }
+      .marginalia-appr-sprout { --dx: -56px; --dy: 92px; }
+      .marginalia-svc-diamond { --dx: 273px; --dy: 105px; }
+      .marginalia-svc-cabinet { --dx: -55px; --dy: 479px; }
+      .marginalia-ts-ear      { --dx: -54px; --dy: 101px; }
+      .marginalia-cta-env     { --dx: -52px; --dy: 114px; }
+      .marginalia-foot-lens   { --dx: 317px; --dy: -137px; }
+    }
+  </style>
 </head>
-<body>
-  <div id="root"></div>
+<body style="--whimsy: 0.6; --ill-fill: #E2B23A; --ill-ink: var(--ink);">
 
-  <!-- Production React (precompiled build — no in-browser Babel). -->
-  <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
+  <!-- ─── NAV / MASTHEAD ─── -->
+  <nav class="nav">
+    <div class="container nav-inner">
+      <span class="nav-mark">Clarity <em>for</em> Complex Work</span>
+      <button class="nav-toggle" type="button" aria-label="Toggle menu" aria-expanded="false"><span class="nav-toggle-menu">Menu</span><span class="nav-toggle-x">Close</span></button>
+      <div class="nav-links">
+        <a href="on-complex-work.html">On Complex Work</a>
+        <a href="for-scale-ups.html">For Scale-Ups</a>
+        <a href="for-ngos.html">For NGOs</a>
+        <a href="for-artists.html">For Artists / Galleries</a>
+        <a href="clarity-sessions.html">The Clarity Sessions</a>
+      </div>
+      <div class="nav-personal">
+        <a href="about.html">About Me</a>
+        <a class="nav-contact" href="mailto:matteo@clarityforcomplexwork.com">Contact</a>
+      </div>
+    </div>
+  </nav>
 
-  <script src="data.js"></script>
-  <script src="app.bundle.js"></script>
+  <!-- ─── HERO ─── -->
+  <header class="hero" data-screen-label="Hero">
+    <div class="container">
+      <div class="hero-eyebrow">
+        <span>№ 001 — PRACTICE</span>
+        <span>Est. 2025</span>
+        <span class="he-rule" aria-hidden="true"></span>
+        <span class="he-vol">Vol. VII · Berlin</span>
+      </div>
+      <div class="hero-grid">
+        <div>
+          <h1 class="hero-title">Clarity<br />for <em>Complex</em><br />Work.</h1>
+          <p class="hero-sub">Strategic communications for work that resists easy summary – NGOs, scale-ups, artists, and art institutions.</p>
+          <div class="hero-cta-row">
+            <a class="hero-feature" href="mailto:matteo@clarityforcomplexwork.com?subject=Hello%20%E2%80%94%20let%27s%20talk">
+              <span class="hero-feature-title">Get in touch</span>
+              <span class="hero-feature-arrow" aria-hidden="true">→</span>
+            </a>
+            <a class="hero-feature hero-feature--ghost" href="on-complex-work.html">
+              <span class="hero-feature-title">What is complex work?</span>
+              <span class="hero-feature-arrow" aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
+        <div>
+          <figure class="hero-portrait">
+            <img src="matteo-portrait-hd.jpeg" alt="Portrait of Matteo Calla" class="ph-img" />
+          </figure>
+          <figcaption class="hero-nameplate">
+            <span class="np-rule"></span>
+            <span class="np-name">Matteo Calla</span>
+            <span class="np-role">Founder</span>
+          </figcaption>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ─── CREDENTIALS ─── -->
+  <section class="cred-section" data-screen-label="Credentials">
+    <div class="container cred-grid">
+      <div class="cred-intro">
+        <div class="cred-eyebrow">What Sets Me Apart</div>
+        <p class="dropcap">My background brings intellectual depth to marketing savvy, allowing me to understand clients across sectors and make their work resonate with the audience they want to reach.</p>
+      </div>
+      <div class="cred-flash cred-mode-fade">
+        <div class="cred-flash-label">Credentials</div>
+        <div class="cred-stack">
+          <div class="cred-line is-on"><span class="cred-text">PhD in Literature, Cornell University</span></div>
+          <div class="cred-line"><span class="cred-text">Writing Instructor, Cornell University</span></div>
+          <div class="cred-line"><span class="cred-text">6 years experience in Marketing &amp; Sales</span></div>
+          <div class="cred-line"><span class="cred-text">Arts Journalist since 2002</span></div>
+          <div class="cred-line"><span class="cred-text">Bachelor's degree in both Arts and Sciences</span></div>
+          <div class="cred-line"><span class="cred-text">Consulting for NGOs, Tech, and the Arts</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CATALOGUE ─── -->
+  <section id="catalogue" class="section section--catalogue" data-screen-label="Catalogue">
+    <div class="marginalia marginalia-cat-mag" aria-hidden="true">
+      <svg viewBox="0 0 220 220" style="display:block;width:100%;height:auto;overflow:visible" aria-hidden="true">
+        <defs>
+          <filter id="rough-mag" x="-15%" y="-15%" width="130%" height="130%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="3"></feTurbulence>
+            <feDisplacementMap in="SourceGraphic" scale="1.1"></feDisplacementMap>
+          </filter>
+        </defs>
+        <g filter="url(#rough-mag)" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="142" y1="124" x2="202" y2="184" stroke="var(--ill-ink)" stroke-width="28" stroke-linecap="round"></line>
+          <line x1="142" y1="124" x2="202" y2="184" stroke="var(--ill-fill)" stroke-width="20" stroke-linecap="round"></line>
+          <circle cx="86" cy="86" r="58" fill="none" stroke="var(--ill-ink)" stroke-width="7"></circle>
+          <path d="M 52,56 C 60,46 78,42 92,48" fill="none" stroke="var(--ill-fill)" stroke-width="7" stroke-linecap="round"></path>
+          <path d="M 48,72 C 52,68 60,68 64,70" fill="none" stroke="var(--ill-fill)" stroke-width="5" stroke-linecap="round"></path>
+        </g>
+      </svg>
+    </div>
+    <div class="container">
+      <div class="sec-head">
+        <div class="sec-num">№ 02 / Catalogue</div>
+        <h2 class="sec-title">A <em>catalogue</em><br />of work, in progress.</h2>
+      </div>
+      <p class="cat-intro dropcap">From NGOs and tech to artists and art galleries, my clients share a common problem: the complexity of their work makes it hard to reach internal clarity and an external audience. Here's a catalogue of ways I've helped.</p>
+      <div class="cat-grid">
+
+        <article class="cat-card cat-card--grid">
+          <div class="cat-left-col">
+            <div class="cat-num-col"><span class="cat-num-lg">01</span><span class="cat-year">2026</span></div>
+            <div class="cat-logo" style="background:#1E8590;border-color:#1E8590;">
+              <img src="images/clients/european-climate-foundation.png" alt="European Climate Foundation logo" class="logo-img" />
+            </div>
+          </div>
+          <div class="cat-content">
+            <div class="cat-tagline"><span class="cat-client-type">International NGO</span><span class="cat-sep">·</span><span class="cat-client">European Climate Foundation</span></div>
+            <h3 class="cat-deliv">Funder Presentations</h3>
+            <p class="cat-desc">Ongoing collaboration on narrative strategy, copy, and design of funder presentation decks at one of Europe's leading climate foundations, built for boards and major donors.</p>
+          </div>
+        </article>
+
+        <article class="cat-card cat-card--grid">
+          <div class="cat-left-col">
+            <div class="cat-num-col"><span class="cat-num-lg">02</span><span class="cat-year">2025</span></div>
+            <div class="cat-logo" style="background:#E8E5DD;border:none;">
+              <img src="images/clients/fired-up-space.png" alt="Fired Up Space logo" class="logo-img" />
+            </div>
+          </div>
+          <div class="cat-content">
+            <div class="cat-tagline"><span class="cat-client-type">Social Enterprise</span><span class="cat-sep">·</span><span class="cat-client">Fired Up Space</span></div>
+            <h3 class="cat-deliv">Keynote Presentation</h3>
+            <p class="cat-desc">Keynote deck and speech for Berlin's People and Culture Festival, turning a social enterprise's approach to job coaching into a compelling case for funders and the general public alike.</p>
+          </div>
+        </article>
+
+        <article class="cat-card cat-card--grid">
+          <div class="cat-left-col">
+            <div class="cat-num-col"><span class="cat-num-lg">03</span><span class="cat-year">2025</span></div>
+            <div class="cat-logo" style="background:#FFFFFF;border-color:#FFFFFF;">
+              <img src="images/clients/claro.png" alt="Claro.AI logo" class="logo-img" />
+            </div>
+          </div>
+          <div class="cat-content">
+            <div class="cat-tagline"><span class="cat-client-type">Tech Startup</span><span class="cat-sep">·</span><span class="cat-client">Claro.AI</span></div>
+            <h3 class="cat-deliv">Pitch Deck &amp; Messaging</h3>
+            <p class="cat-desc">Pitch deck and web taglines for an AI data platform, translating a complex product into investor-ready language that helped secure another round of funding.</p>
+          </div>
+        </article>
+
+        <article class="cat-card cat-card--grid">
+          <div class="cat-left-col">
+            <div class="cat-num-col"><span class="cat-num-lg">04</span><span class="cat-year">2025</span></div>
+            <div class="cat-logo" style="background:linear-gradient(to bottom, #EE5123 0%, #EE5123 50%, #020003 50%, #020003 100%);border-color:transparent;border-top-color:#EE5123;border-bottom-color:#0A0A0A;">
+              <img src="images/clients/jergon.png" alt="JERGON Gallery logo" class="logo-img" />
+            </div>
+          </div>
+          <div class="cat-content">
+            <div class="cat-tagline"><span class="cat-client-type">Art Gallery</span><span class="cat-sep">·</span><span class="cat-client">JERGON Gallery</span></div>
+            <h3 class="cat-deliv">Messaging &amp; Positioning Rebrand</h3>
+            <p class="cat-desc">Messaging and positioning advisory for a contemporary art gallery in Berlin, translating a sophisticated curatorial vision into clear, audience-ready language across web, press, and social.</p>
+          </div>
+        </article>
+
+        <article class="cat-card cat-card--grid">
+          <div class="cat-left-col">
+            <div class="cat-num-col"><span class="cat-num-lg">05</span><span class="cat-year">2025</span></div>
+            <div class="cat-logo" style="background:#0A0A0A;border-color:#0A0A0A;">
+              <img src="images/clients/john-londono.jpg" alt="John Londono logo" class="logo-img" />
+            </div>
+          </div>
+          <div class="cat-content">
+            <div class="cat-tagline"><span class="cat-client-type">Artist</span><span class="cat-sep">·</span><span class="cat-client">John Londono</span></div>
+            <h3 class="cat-deliv">Exhibition Text</h3>
+            <p class="cat-desc">Exhibition text for a solo photography show during the 2025 European Month of Photography, articulating something essential the artist hadn't yet named and bringing it to a wide audience.</p>
+          </div>
+        </article>
+
+        <article class="cat-card cat-card--grid">
+          <div class="cat-left-col">
+            <div class="cat-num-col"><span class="cat-num-lg">06</span><span class="cat-year">2024</span></div>
+            <div class="cat-logo" style="background:#FFFFFF;border-color:#FFFFFF;">
+              <img src="images/clients/michael-janssen.png" alt="Michael Janssen Galerie logo" class="logo-img" />
+            </div>
+          </div>
+          <div class="cat-content">
+            <div class="cat-tagline"><span class="cat-client-type">Art Gallery</span><span class="cat-sep">·</span><span class="cat-client">Michael Janssen Galerie</span></div>
+            <h3 class="cat-deliv">Artist Talk / Interview</h3>
+            <p class="cat-desc">Moderated talk with Angolan artist Yonamine at Michael Janssen Galerie, framing the artist's practice for a live audience with precision, accessibility, and relevance.</p>
+          </div>
+        </article>
+
+      </div>
+      <p class="rail-hint">Swipe through the catalogue <span aria-hidden="true">→</span></p>
+    </div>
+  </section>
+
+  <!-- ─── APPROACH ─── -->
+  <section id="approach" class="section section--approach" data-screen-label="Approach">
+    <div class="marginalia marginalia-appr-sprout" aria-hidden="true">
+      <svg viewBox="0 0 160 220" style="display:block;width:100%;height:auto;overflow:visible" aria-hidden="true">
+        <defs>
+          <filter id="rough-sprout" x="-15%" y="-15%" width="130%" height="130%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="11"></feTurbulence>
+            <feDisplacementMap in="SourceGraphic" scale="1.0"></feDisplacementMap>
+          </filter>
+        </defs>
+        <g filter="url(#rough-sprout)" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M 28,200 C 56,194 110,196 132,200" fill="none" stroke="var(--ill-ink)" stroke-width="3"></path>
+          <path d="M 80,200 C 75,160 90,120 78,80 C 72,60 78,46 84,30" fill="none" stroke="var(--ill-ink)" stroke-width="5"></path>
+          <path d="M 78,98 C 42,86 22,112 38,134 C 60,138 78,120 78,98 Z" fill="var(--ill-fill)" stroke="var(--ill-ink)" stroke-width="5"></path>
+          <path d="M 82,52 C 124,42 144,68 130,90 C 110,96 84,78 82,52 Z" fill="var(--ill-fill)" stroke="var(--ill-ink)" stroke-width="5"></path>
+        </g>
+        <polygon points="120,10 122.88,18 120,26 117.12,18" fill="var(--ill-fill)" stroke="var(--ill-ink)" stroke-width="1.5" stroke-linejoin="round" transform="rotate(8 120 18)"></polygon>
+      </svg>
+    </div>
+    <div class="container">
+      <div class="sec-head">
+        <div class="sec-num">№ 03 / APPROACH</div>
+        <div>
+          <h2 class="appr-hero">You can't <em>grow</em><br />what you don't <em>see</em>.</h2>
+          <p class="appr-sub">My <em>approach</em>, in three parts.</p>
+        </div>
+      </div>
+      <div class="appr-pillars">
+        <div class="appr-col">
+          <div class="appr-lbl"><span class="appr-num">I.</span> The Problem</div>
+          <h4 class="appr-head">Complex work <em>clouds</em> its own view.</h4>
+          <p class="appr-body" style="font-family:'Space Grotesk';">The deeper the work, the more it relies on insider language. Outsiders can't see in, and the team loses sight of what it actually does, too.</p>
+        </div>
+        <div class="appr-col">
+          <div class="appr-lbl"><span class="appr-num">II.</span> The Stakes</div>
+          <h4 class="appr-head">Clarity <em>is</em> identity.</h4>
+          <p class="appr-body" style="font-family:'Space Grotesk';">Lack of clarity is more than a comms problem. How an organisation understands itself shapes culture, hiring, and product as much as it shapes every funder pitch, gallery text, and public talk. External communication is internal cohesion.</p>
+        </div>
+        <div class="appr-col">
+          <div class="appr-lbl"><span class="appr-num">III.</span> My Solution</div>
+          <h4 class="appr-head">First clarify, <em>then</em> communicate.</h4>
+          <p class="appr-body" style="font-family:'Space Grotesk';">Most comms focus on the audience. For complex work, that's not enough. I offer an external eye that strips the jargon to clarify what you really mean, the basis for both clear identity and audience-tailored messaging.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── SERVICES ─── -->
+  <section id="services" class="section section--services" data-screen-label="Services">
+    <div class="marginalia marginalia-svc-diamond" aria-hidden="true">
+      <svg viewBox="0 0 240 220" style="display:block;width:100%;height:auto;overflow:visible" aria-hidden="true">
+        <defs>
+          <filter id="rough-diamond" x="-15%" y="-15%" width="130%" height="130%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" seed="11"></feTurbulence>
+            <feDisplacementMap in="SourceGraphic" scale="1.4"></feDisplacementMap>
+          </filter>
+        </defs>
+        <g filter="url(#rough-diamond)" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M 120,8 L 120,28" stroke="var(--ill-fill)" stroke-width="4"></path>
+          <path d="M 56,30 L 70,46" stroke="var(--ill-fill)" stroke-width="4"></path>
+          <path d="M 184,30 L 170,46" stroke="var(--ill-fill)" stroke-width="4"></path>
+          <path d="M 88,18 L 96,38" stroke="var(--ill-fill)" stroke-width="4"></path>
+          <path d="M 152,18 L 144,38" stroke="var(--ill-fill)" stroke-width="4"></path>
+          <path d="M 22,68 L 40,72" stroke="var(--ill-fill)" stroke-width="4"></path>
+          <path d="M 218,68 L 200,72" stroke="var(--ill-fill)" stroke-width="4"></path>
+          <path d="M 34,108 L 206,108" stroke="var(--ill-ink)" stroke-width="3.5" fill="none"></path>
+          <path d="M 84,72 L 156,72" stroke="var(--ill-ink)" stroke-width="6" fill="none"></path>
+          <path d="M 84,72 L 34,108" stroke="var(--ill-ink)" stroke-width="6" fill="none"></path>
+          <path d="M 156,72 L 206,108" stroke="var(--ill-ink)" stroke-width="6" fill="none"></path>
+          <path d="M 34,108 L 120,206" stroke="var(--ill-ink)" stroke-width="6" fill="none"></path>
+          <path d="M 206,108 L 120,206" stroke="var(--ill-ink)" stroke-width="6" fill="none"></path>
+          <path d="M 84,72 L 108,108 L 120,72 L 132,108 L 156,72" stroke="var(--ill-ink)" stroke-width="3" fill="none"></path>
+          <path d="M 108,108 L 120,206" stroke="var(--ill-ink)" stroke-width="3" fill="none"></path>
+          <path d="M 132,108 L 120,206" stroke="var(--ill-ink)" stroke-width="3" fill="none"></path>
+        </g>
+      </svg>
+    </div>
+    <div class="marginalia marginalia-svc-cabinet" aria-hidden="true">
+      <svg viewBox="0 0 240 220" style="display:block;width:100%;height:auto;overflow:visible" aria-hidden="true">
+        <defs>
+          <filter id="rough-cc" x="-15%" y="-15%" width="130%" height="130%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="31"></feTurbulence>
+            <feDisplacementMap in="SourceGraphic" scale="1.0"></feDisplacementMap>
+          </filter>
+        </defs>
+        <g filter="url(#rough-cc)" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M 50,60 L 220,60 L 200,82 L 30,82 Z" fill="var(--ill-ink)" stroke="var(--ill-ink)" stroke-width="4"></path>
+          <path d="M 44,52 L 70,52 L 72,38 L 44,38 Z" fill="var(--ill-fill)" stroke="var(--ill-ink)" stroke-width="3.5"></path>
+          <path d="M 72,60 L 98,60 L 100,46 L 72,46 Z" fill="none" stroke="var(--ill-ink)" stroke-width="3.5"></path>
+          <path d="M 100,42 L 126,42 L 128,28 L 100,28 Z" fill="var(--ill-fill)" stroke="var(--ill-ink)" stroke-width="3.5"></path>
+          <path d="M 128,56 L 154,56 L 156,42 L 128,42 Z" fill="none" stroke="var(--ill-ink)" stroke-width="3.5"></path>
+          <path d="M 156,48 L 182,48 L 184,34 L 156,34 Z" fill="var(--ill-fill)" stroke="var(--ill-ink)" stroke-width="3.5"></path>
+          <path d="M 184,58 L 206,58 L 208,44 L 184,44 Z" fill="none" stroke="var(--ill-ink)" stroke-width="3.5"></path>
+          <path d="M 50,46 L 66,46" stroke="var(--ill-ink)" stroke-width="1.5"></path>
+          <path d="M 106,36 L 122,36" stroke="var(--ill-ink)" stroke-width="1.5"></path>
+          <path d="M 162,42 L 178,42" stroke="var(--ill-ink)" stroke-width="1.5"></path>
+          <path d="M 30,82 L 200,82 L 200,200 L 30,200 Z" fill="none" stroke="var(--ill-ink)" stroke-width="6"></path>
+          <path d="M 200,82 L 220,60 L 220,178 L 200,200" fill="none" stroke="var(--ill-ink)" stroke-width="5"></path>
+          <path d="M 44,92 L 188,92" stroke="var(--ill-ink)" stroke-width="2"></path>
+          <path d="M 44,100 L 188,100" stroke="var(--ill-ink)" stroke-width="2"></path>
+          <rect x="82" y="126" width="66" height="22" fill="none" stroke="var(--ill-ink)" stroke-width="3.5"></rect>
+          <path d="M 92,138 L 138,138" stroke="var(--ill-ink)" stroke-width="2"></path>
+          <path d="M 100,168 C 100,188 130,188 130,168" fill="var(--ill-ink)" stroke="var(--ill-ink)" stroke-width="4"></path>
+        </g>
+        <polygon points="20,6 22.88,14 20,22 17.12,14" fill="var(--ill-fill)" stroke="var(--ill-ink)" stroke-width="1.5" stroke-linejoin="round" transform="rotate(10 20 14)"></polygon>
+      </svg>
+    </div>
+    <div class="container">
+
+      <!-- Flagship — Clarity Sessions teaser -->
+      <article class="clarity clarity--teaser">
+        <header class="clarity-head">
+          <div class="clarity-kicker">№ 04a / SERVICES</div>
+          <div class="clarity-lead">My Signature Offering</div>
+          <h3 class="clarity-title">The Clarity Sessions<br /><em>Excavating your<br class="cs-sub-break" /> Core Narrative</em></h3>
+          <div class="clarity-format">3–5 sessions</div>
+        </header>
+        <p class="clarity-teaser-pitch"><b>Coaching and advisory</b> to get at the heart of what you do, and the language to share it effectively.</p>
+        <a class="clarity-more" href="clarity-sessions.html">About the sessions <span class="clarity-more-arr">→</span></a>
+      </article>
+
+      <div class="svc-head svc-head--index">
+        <div></div>
+        <div>
+          <div class="clarity-kicker" style="margin-bottom:16px;">№ 04b / SERVICES</div>
+          <h2 class="sec-title">A Complete Index<br /><em style="color:#5D2A2A;">of Services.</em></h2>
+          <p class="svc-sub">Available <b>on a project basis</b>, <b>as a monthly retainer</b>, or <b>in a fractional senior comms role</b> — whichever fits the work.</p>
+        </div>
+      </div>
+
+      <!-- Desktop matrix -->
+      <div class="m-grid" data-mode="">
+        <div class="m-cell m-corner"></div>
+
+        <a class="m-cell m-col-head" data-c="0" href="for-scale-ups.html">
+          <span class="m-label">For Scale-Ups</span>
+          <span class="m-col-more">Read more <span class="m-col-arr" aria-hidden="true">→</span></span>
+        </a>
+        <a class="m-cell m-col-head" data-c="1" href="for-ngos.html">
+          <span class="m-label">For NGOs &amp; Foundations</span>
+          <span class="m-col-more">Read more <span class="m-col-arr" aria-hidden="true">→</span></span>
+        </a>
+        <a class="m-cell m-col-head" data-c="2" href="for-artists.html">
+          <span class="m-label">For Artists &amp; Institutions</span>
+          <span class="m-col-more">Read more <span class="m-col-arr" aria-hidden="true">→</span></span>
+        </a>
+
+        <div class="m-cell m-row-head" data-r="0"><span class="m-label">Strategic Communications</span></div>
+        <div class="m-cell m-data" data-r="0" data-c="0"><ul><li>Pitch decks / investor presentations</li><li>Keynote / conference presentations</li><li>Messaging and positioning guides</li><li>Web and social copy</li></ul></div>
+        <div class="m-cell m-data" data-r="0" data-c="1"><ul><li>Funder presentations</li><li>Keynote / conference presentations</li><li>Impact reports / annual reports</li><li>Donor communications and campaign copy</li><li>Press and media materials</li></ul></div>
+        <div class="m-cell m-data" data-r="0" data-c="2"><ul><li>Exhibition and gallery texts</li><li>Catalogue essays and forewords</li><li>Web and social copy</li><li>Artist talks</li><li>Press and media materials</li></ul></div>
+
+        <div class="m-cell m-row-head" data-r="1"><span class="m-label">Thought Advisory</span></div>
+        <div class="m-cell m-data" data-r="1" data-c="0"><ul><li>Narrative strategy advisory</li><li>Founder voice coaching</li><li>Communications audit</li></ul></div>
+        <div class="m-cell m-data" data-r="1" data-c="1"><ul><li>Public engagement coaching</li><li>Online and social media advisory</li><li>Communications audit</li></ul></div>
+        <div class="m-cell m-data" data-r="1" data-c="2"><ul><li>Project consultation</li><li>Online self-presentation coaching</li><li>Voice and framing coaching</li></ul></div>
+
+        <div class="m-cell m-row-head" data-r="2"><span class="m-label">Workshops &amp; Training</span></div>
+        <div class="m-cell m-data" data-r="2" data-c="0"><ul><li>Messaging alignment workshops</li><li>Founder storytelling intensive</li></ul></div>
+        <div class="m-cell m-data" data-r="2" data-c="1"><ul><li>Communicating impact workshops</li><li>Funder storytelling workshops</li></ul></div>
+        <div class="m-cell m-data" data-r="2" data-c="2"><ul><li>Art-writing workshops</li><li>Public engagement workshops</li></ul></div>
+      </div>
+
+      <!-- Mobile / tablet tabs (CSS shows this ≤880px; the matrix above is shown >880px) -->
+      <div class="svc-m svc-m--tabs">
+        <div class="svc-m-tabs" role="tablist">
+          <button type="button" role="tab" class="svc-m-tab is-active" data-tab="0" aria-selected="true">For Scale-Ups</button>
+          <button type="button" role="tab" class="svc-m-tab" data-tab="1" aria-selected="false">For NGOs</button>
+          <button type="button" role="tab" class="svc-m-tab" data-tab="2" aria-selected="false">For Artists</button>
+        </div>
+
+        <div class="svc-m-panel" data-panel="0">
+          <div class="svc-m-groups">
+            <div class="svc-m-group"><div class="svc-m-group-label">Strategic Communications</div><ul><li>Pitch decks / investor presentations</li><li>Keynote / conference presentations</li><li>Messaging and positioning guides</li><li>Web and social copy</li></ul></div>
+            <div class="svc-m-group"><div class="svc-m-group-label">Thought Advisory</div><ul><li>Narrative strategy advisory</li><li>Founder voice coaching</li><li>Communications audit</li></ul></div>
+            <div class="svc-m-group"><div class="svc-m-group-label">Workshops &amp; Training</div><ul><li>Messaging alignment workshops</li><li>Founder storytelling intensive</li></ul></div>
+          </div>
+          <a class="svc-m-cta" href="for-scale-ups.html">Explore Scale-Ups <span aria-hidden="true">→</span></a>
+        </div>
+
+        <div class="svc-m-panel" data-panel="1" hidden>
+          <div class="svc-m-groups">
+            <div class="svc-m-group"><div class="svc-m-group-label">Strategic Communications</div><ul><li>Funder presentations</li><li>Keynote / conference presentations</li><li>Impact reports / annual reports</li><li>Donor communications and campaign copy</li><li>Press and media materials</li></ul></div>
+            <div class="svc-m-group"><div class="svc-m-group-label">Thought Advisory</div><ul><li>Public engagement coaching</li><li>Online and social media advisory</li><li>Communications audit</li></ul></div>
+            <div class="svc-m-group"><div class="svc-m-group-label">Workshops &amp; Training</div><ul><li>Communicating impact workshops</li><li>Funder storytelling workshops</li></ul></div>
+          </div>
+          <a class="svc-m-cta" href="for-ngos.html">Explore NGOs <span aria-hidden="true">→</span></a>
+        </div>
+
+        <div class="svc-m-panel" data-panel="2" hidden>
+          <div class="svc-m-groups">
+            <div class="svc-m-group"><div class="svc-m-group-label">Strategic Communications</div><ul><li>Exhibition and gallery texts</li><li>Catalogue essays and forewords</li><li>Web and social copy</li><li>Artist talks</li><li>Press and media materials</li></ul></div>
+            <div class="svc-m-group"><div class="svc-m-group-label">Thought Advisory</div><ul><li>Project consultation</li><li>Online self-presentation coaching</li><li>Voice and framing coaching</li></ul></div>
+            <div class="svc-m-group"><div class="svc-m-group-label">Workshops &amp; Training</div><ul><li>Art-writing workshops</li><li>Public engagement workshops</li></ul></div>
+          </div>
+          <a class="svc-m-cta" href="for-artists.html">Explore Artists <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ─── TESTIMONIALS ─── -->
+  <section id="testimonials" class="section section--testimonials" data-screen-label="Testimonials">
+    <div class="marginalia marginalia-ts-ear" aria-hidden="true">
+      <svg viewBox="0 0 180 220" style="display:block;width:100%;height:auto;overflow:visible" aria-hidden="true">
+        <defs>
+          <filter id="rough-ear" x="-15%" y="-15%" width="130%" height="130%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="5"></feTurbulence>
+            <feDisplacementMap in="SourceGraphic" scale="1.0"></feDisplacementMap>
+          </filter>
+        </defs>
+        <g filter="url(#rough-ear)" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M 56,30 C 30,40 22,82 30,128 C 36,170 64,200 92,196 C 110,194 116,182 110,170 C 100,150 108,138 120,128 C 138,116 142,90 134,68 C 124,40 92,20 56,30 Z" fill="var(--ill-fill)" stroke="var(--ill-ink)" stroke-width="5"></path>
+          <path d="M 70,70 C 56,84 56,118 70,140 C 82,156 100,154 100,140" fill="none" stroke="var(--ill-ink)" stroke-width="4"></path>
+          <path d="M 82,108 C 88,106 94,110 92,118" fill="none" stroke="var(--ill-ink)" stroke-width="3"></path>
+          <path d="M 154,80 L 174,72" stroke="var(--ill-ink)" stroke-width="3.5"></path>
+          <path d="M 158,108 L 178,108" stroke="var(--ill-ink)" stroke-width="3.5"></path>
+          <path d="M 154,136 L 174,144" stroke="var(--ill-ink)" stroke-width="3.5"></path>
+        </g>
+      </svg>
+    </div>
+    <div class="container" style="font-family:'Instrument Serif';">
+      <div class="sec-head">
+        <div class="sec-num">№ 05 / Testimonials</div>
+        <h2 class="sec-title">A <em>word</em> from<br />my clients.</h2>
+      </div>
+      <div class="ts-grid">
+
+        <figure class="ts lg">
+          <blockquote>Matteo has a remarkable ability to quickly grasp complex organisational structures and translate them into clear, compelling, and highly effective communications materials.</blockquote>
+          <p class="ts-body">I would recommend him without hesitation to any organisation looking to bring clarity, rigour, and strategic sharpness to complex, high-stakes communications work.</p>
+          <div class="ts-head">
+            <img class="avatar avatar-photo" src="images/testimonials/berivan-dural.png" alt="Berivan Dural" style="width:64px;height:64px;" />
+            <figcaption>
+              <span class="ts-who">Berivan Dural</span>
+              <span class="ts-org">Senior Communications Associate, European Climate Foundation</span>
+              <span class="ts-city">London</span>
+            </figcaption>
+          </div>
+        </figure>
+
+        <figure class="ts sm">
+          <blockquote>Matteo has a unique ability to frame complex ideas, and was able to capture not only the technical aspects but also the philosophical questions in my work.</blockquote>
+          <p class="ts-body">He approached my topics with dedicated curiosity and created a space for open dialogue, fostering an engaged and enriching conversation.</p>
+          <div class="ts-head">
+            <img class="avatar avatar-photo" src="images/testimonials/sophie-erlund.png" alt="Sophie Erlund" style="width:44px;height:44px;" />
+            <figcaption>
+              <span class="ts-who">Sophie Erlund</span>
+              <span class="ts-org">Artist &amp; Professor, TUM</span>
+              <span class="ts-city">Munich</span>
+            </figcaption>
+          </div>
+        </figure>
+
+        <figure class="ts sm">
+          <blockquote>My collaboration with Matteo Calla has been very important for my gallery, JERGON, in Berlin and for my work as a curator.</blockquote>
+          <p class="ts-body">He made a decisive contribution in defining my positioning within the Berlin contemporary arts scene and in creating a coherent communications strategy across social media, LinkedIn, and other platforms I use.</p>
+          <div class="ts-head">
+            <img class="avatar avatar-photo" src="images/testimonials/nicola-patruno.png" alt="Nicola Patruno" style="width:44px;height:44px;" />
+            <figcaption>
+              <span class="ts-who">Nicola Patruno</span>
+              <span class="ts-org">Founder, JERGON Gallery</span>
+              <span class="ts-city">Berlin</span>
+            </figcaption>
+          </div>
+        </figure>
+
+        <figure class="ts sm">
+          <blockquote>I can wholeheartedly recommend Matteo's work. He is quick to respond and super talented with words.</blockquote>
+          <p class="ts-body">Matteo helped me crystallise the core message, create the presentation, and not only prepare but feel confident about my speech.</p>
+          <div class="ts-head">
+            <img class="avatar avatar-photo" src="images/testimonials/clara-hahn.png" alt="Clara Hahn" style="width:44px;height:44px;" />
+            <figcaption>
+              <span class="ts-who">Clara Hahn</span>
+              <span class="ts-org">Founder, Fired Up Space GmbH</span>
+              <span class="ts-city">Berlin</span>
+            </figcaption>
+          </div>
+        </figure>
+
+        <figure class="ts sm">
+          <blockquote>Matteo Calla's text for the exhibition captured its essence with rare sensitivity and depth.</blockquote>
+          <p class="ts-body">His thoughtful and intuitive questions led to a nuanced exploration that made me feel deeply understood as an artist. His writing resonates beyond description &mdash; like a quiet echo of the work itself.</p>
+          <div class="ts-head">
+            <img class="avatar avatar-photo" src="images/testimonials/john-londono.png" alt="John Londoño" style="width:44px;height:44px;" />
+            <figcaption>
+              <span class="ts-who">John Londoño</span>
+              <span class="ts-org">Photographer</span>
+              <span class="ts-city">Brussels</span>
+            </figcaption>
+          </div>
+        </figure>
+
+      </div>
+      <p class="rail-hint">Swipe for more <span aria-hidden="true">→</span></p>
+    </div>
+  </section>
+
+  <!-- ─── CTA ─── -->
+  <section id="book" class="section section--cta" data-screen-label="Correspondence">
+    <div class="marginalia marginalia-cta-env" aria-hidden="true">
+      <svg viewBox="0 0 240 180" style="display:block;width:100%;height:auto;overflow:visible" aria-hidden="true">
+        <defs>
+          <filter id="rough-env" x="-15%" y="-15%" width="130%" height="130%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="17"></feTurbulence>
+            <feDisplacementMap in="SourceGraphic" scale="1.0"></feDisplacementMap>
+          </filter>
+        </defs>
+        <g filter="url(#rough-env)" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M 16,48 L 224,48 L 224,156 L 16,156 Z" fill="var(--ill-fill)" stroke="var(--ill-ink)" stroke-width="6"></path>
+          <path d="M 16,48 L 120,108 L 224,48" fill="none" stroke="var(--ill-ink)" stroke-width="5"></path>
+          <path d="M 170,16 L 220,16 L 220,60 L 170,60 Z" fill="var(--ill-ink)" stroke="var(--ill-ink)" stroke-width="4"></path>
+          <circle cx="140" cy="38" r="22" fill="none" stroke="var(--ill-ink)" stroke-width="3.5"></circle>
+          <circle cx="140" cy="38" r="13" fill="none" stroke="var(--ill-ink)" stroke-width="2"></circle>
+        </g>
+      </svg>
+    </div>
+    <div class="container">
+      <div class="sec-head">
+        <div class="sec-num">№ 06 / Correspondence</div>
+        <h2 class="sec-title">How we <em>work</em><br />together.</h2>
+      </div>
+      <div class="ctaA">
+        <div class="ctaA-method">
+          <div class="ctaA-beat">
+            <span class="ctaA-num">I.</span>
+            <div>
+              <h4 class="ctaA-t">I listen.</h4>
+              <p class="ctaA-b">I start by learning what you do: in conversation with you, and by reading my way through your decks, drafts, transcripts, and the way you actually talk about the work.</p>
+            </div>
+          </div>
+          <div class="ctaA-beat">
+            <span class="ctaA-num">II.</span>
+            <div>
+              <h4 class="ctaA-t">We clarify.</h4>
+              <p class="ctaA-b">We analyse and synthesise what you actually do until its core comes into view, and find the language you don't yet have to name it.</p>
+            </div>
+          </div>
+          <div class="ctaA-beat">
+            <span class="ctaA-num">III.</span>
+            <div>
+              <h4 class="ctaA-t">We shape for your audience.</h4>
+              <p class="ctaA-b">Then we shape the message for its audience, format, and goal: funder, founder, gallery wall, or stage.</p>
+            </div>
+          </div>
+        </div>
+        <div class="ctaA-panel">
+          <p class="ctaA-open">Tell me more about your work.</p>
+          <p class="ctaA-invite">Book a free thirty-minute consultation.</p>
+          <a class="ctaA-btn" href="mailto:matteo@clarityforcomplexwork.com?subject=Hello%20%E2%80%94%20let%27s%20talk">Get in touch <span class="arr">→</span></a>
+          <div class="ctaA-meta">
+            <span style="color:rgb(201, 122, 85);">matteo@clarityforcomplexwork.com</span>
+            <a class="cta-li" href="https://www.linkedin.com/in/matteocalla/" target="_blank" rel="noopener">Connect on Linked<span class="li-mark">in</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FOOTER ─── -->
+  <footer class="foot">
+    <div class="marginalia marginalia-foot-lens" aria-hidden="true">
+      <svg viewBox="0 0 280 180" style="display:block;width:100%;height:auto;overflow:visible" aria-hidden="true">
+        <defs>
+          <filter id="rough-foot-lens" x="-15%" y="-15%" width="130%" height="130%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="23"></feTurbulence>
+            <feDisplacementMap in="SourceGraphic" scale="0.9"></feDisplacementMap>
+          </filter>
+        </defs>
+        <g filter="url(#rough-foot-lens)" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M 10,52 L 102,52" stroke="var(--ill-ink)" stroke-width="2" fill="none"></path>
+          <path d="M 10,90 L 102,90" stroke="var(--ill-ink)" stroke-width="2" fill="none"></path>
+          <path d="M 10,128 L 102,128" stroke="var(--ill-ink)" stroke-width="2" fill="none"></path>
+          <path d="M 120,16 C 152,40 152,140 120,164 C 88,140 88,40 120,16 Z" fill="var(--ill-fill)" stroke="var(--ill-ink)" stroke-width="5.5"></path>
+          <path d="M 138,52 L 248,82" stroke="var(--ill-ink)" stroke-width="2" fill="none"></path>
+          <path d="M 138,90 L 248,90" stroke="var(--ill-ink)" stroke-width="2" fill="none"></path>
+          <path d="M 138,128 L 248,98" stroke="var(--ill-ink)" stroke-width="2" fill="none"></path>
+          <circle cx="252" cy="90" r="2.5" fill="var(--ill-ink)"></circle>
+        </g>
+      </svg>
+    </div>
+    <div class="container foot-inner">
+      <span>© 2026 · Clarity for Complex Work</span>
+      <span>Set in Instrument Serif · Printed in Berlin</span>
+      <span><a href="impressum.html">Impressum</a> · <a href="datenschutz.html">Datenschutz</a></span>
+    </div>
+  </footer>
+
+  <script src="home.js"></script>
   <script src="nav-menu.js"></script>
   <!-- Cloudflare Web Analytics -->
   <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "dcd0d2cc7058401081019d607f569e5e"}'></script>

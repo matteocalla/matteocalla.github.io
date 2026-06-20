@@ -409,7 +409,7 @@ body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
   text-transform: uppercase;
   color: var(--margin);
   font-weight: 500;
-  margin: clamp(40px, 5vw, 64px) 0 24px;
+  margin: clamp(26px, 3vw, 40px) 0 24px;
 }
 .essay-part:first-child {
   margin-top: 0;
@@ -425,6 +425,14 @@ body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
   margin: clamp(32px, 4vw, 52px) 0;
   padding: 0;
   max-width: 64ch;
+  /* Measure the figure in the SAME font as the prose column so its 64ch
+     equals .sp-prose's 64ch. Otherwise the figure resolves ~40px wider
+     and, being left-pinned, pushes the centered quote right of the column
+     (bigger gap on the left). Only affects the figure's measuring box —
+     the blockquote sets its own display font, so the quote looks identical,
+     just centered on the column. */
+  font-family: var(--serif);
+  font-size: clamp(17px, 1.25vw, 19px);
   text-align: center;
 }
 .essay-pull blockquote {
@@ -553,18 +561,12 @@ body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
   font-style: italic;
   font-weight: 500;
   color: var(--accent);
-  box-shadow: inset 0 -0.15em 0 rgba(201, 122, 85, 0.18);
   padding: 0 0.02em;
 }
-/* Underlined variant of the coda — a real rule beneath the line
-   rather than the faint highlight, for a closing sentence that
-   wants to land as the essay's signature. */
+/* Underlined variant of the coda — underline removed per request;
+   now falls back to the base coda's oxblood highlight + italics. */
 .sp-prose .sp-prose-coda--underline {
-  box-shadow: none;
-  text-decoration: underline;
-  text-decoration-color: var(--accent);
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.18em;
+  text-decoration: none;
 }
 
 /* SERVICES STACK — three labelled blocks (Strategic Comms /
@@ -1400,12 +1402,13 @@ body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
    collapses to a single stacked column on actual phones (≤560px), where
    the eyebrow/CTA/portrait mobile rules above already take over. */
 @media (max-width: 560px) {
-  /* Mobile hero order: pitch → portrait → name → actions. The two CTA
-     buttons move BELOW "Matteo Calla / Founder" so they close the hero
-     rather than splitting the title/subtitle from the portrait. The two
-     column wrappers become display:contents so the title, subtitle,
-     portrait, nameplate and CTA row are all direct flex items of the
-     hero grid and can be reordered. (Desktop + tablet are untouched.) */
+  /* Mobile hero order: pitch → actions → portrait → name. The two CTA
+     buttons sit directly below the subtitle — the prime conversion spot —
+     and above the portrait, rather than closing the hero after the
+     nameplate. The two column wrappers become display:contents so the
+     title, subtitle, CTA row, portrait and nameplate are all direct flex
+     items of the hero grid and can be reordered. (Desktop + tablet are
+     untouched.) */
   .hero-grid {
     display: flex;
     flex-direction: column;
@@ -1414,9 +1417,9 @@ body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
   .hero .hero-grid > div { display: contents; }
   .hero-title { order: 1; }
   .hero-sub { order: 2; }
-  .hero-portrait { order: 3; max-width: 480px; aspect-ratio: 4/5; }
-  .hero-nameplate { order: 4; }
-  .hero-cta-row { order: 5; margin-top: 22px; }
+  .hero-cta-row { order: 3; margin-top: 0; margin-bottom: 30px; }
+  .hero-portrait { order: 4; max-width: 480px; aspect-ratio: 4/5; }
+  .hero-nameplate { order: 5; }
 }
 
 /* Two-column hero (tablet + desktop): line up the bottom of the CTA
@@ -2619,19 +2622,51 @@ body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
   text-transform: uppercase;
   color: #C97A55;
 }
+/* LinkedIn link in the contact CTA — tan mono with the "in" glyph, shown
+   under the email on the homepage and subpage CTAs. More prominent than the
+   footer link, since this is the act-of-reaching-out zone. */
+.cta-li {
+  --li-col: #C97A55;
+  color: var(--li-col);
+  text-decoration: none;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.cta-li svg { width: 13px; height: 13px; fill: currentColor; display: inline-block; vertical-align: -0.12em; margin-left: 7px; }
+/* LinkedIn "in" set as the logo mark — the last two letters of the word
+   become a small rounded badge. Background is driven by --li-col (the link
+   colour) rather than currentColor, since the badge sets its own text
+   colour to paper; both shift to ink on hover via --li-col. */
+.cta-li .li-mark {
+  display: inline-block;
+  background: var(--li-col);
+  color: var(--paper);
+  text-transform: lowercase;
+  letter-spacing: 0;
+  font-size: 0.84em;
+  font-weight: 500;
+  line-height: 1;
+  padding: 0.22em 0.26em;
+  border-radius: 3px;
+  margin-left: 2px;
+  vertical-align: 0.12em;
+}
+.cta-li:hover { --li-col: var(--ink); }
+.sp-cta-body .cta-li { margin-top: 12px; }
 
 @media (max-width: 880px) {
-  /* On mobile the three "method" beats pushed the actual contact button
-     ~970px below the heading — the conversion action was buried almost a
-     full screen down. Reorder so the panel (invite + button + email) sits
-     directly under the heading, with the method beats below as supporting
-     detail for anyone who keeps scrolling. */
+  /* Stack the two columns. Source order is kept (heading → the three
+     method beats → booking panel) so the "How we work together" narrative
+     reads in full before the booking action, rather than the panel jumping
+     above the beats. This is a considered, high-trust page — the beats are
+     the persuasion, so they lead. */
   .ctaA {
     display: flex;
     flex-direction: column;
     gap: 40px;
   }
-  .ctaA-panel { order: -1; }
   /* Tighten the rhythm between the three steps (like Approach) so the
      supporting method isn't such a long scroll. */
   .ctaA-method { gap: 22px; }
@@ -2655,6 +2690,11 @@ body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
 }
 .foot a { color: var(--margin); }
 .foot a:hover { color: var(--ink); }
+/* LinkedIn glyph in the footer — monochrome "in" mark that inherits the
+   muted footer link color and darkens to ink on hover, matching the legal
+   links beside it. */
+.foot-li { display: inline-block; vertical-align: -0.22em; line-height: 0; }
+.foot-li svg { width: 14px; height: 14px; display: block; fill: currentColor; }
 
 /* ─── WHIMSY: drop caps + ornaments ─── */
 .dropcap::first-letter {
@@ -3155,10 +3195,21 @@ body.subpage .foot-lens-static {
 .clarity-head { display: flex; flex-direction: column; gap: 14px; margin-bottom: 36px; }
 .clarity-kicker {
   font-family: var(--mono);
-  font-size: 11px; letter-spacing: 0.22em;
+  font-size: 11.5px; letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--margin);
 }
+/* §04 role boxes — a small filled oxblood label above each block's title
+   (The Core Offering / The Complete Index) so the section's two parts are
+   instantly identifiable. Same device on both halves. */
+.role-box {
+  display: inline-flex; align-self: flex-start; white-space: nowrap;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--accent);
+  border: 1px solid var(--accent); border-radius: 2px;
+  padding: 7px 13px; margin: 2px 0 4px;
+}
+.svc-head--index .role-box { margin-bottom: 18px; }
 .clarity-format {
   font-family: var(--display);
   font-style: italic;
@@ -3171,13 +3222,18 @@ body.subpage .foot-lens-static {
   font-weight: 400;
   font-style: normal;
   font-size: clamp(36px, 5vw, 64px);
-  line-height: 1.02;
+  line-height: 1.0;
   margin: 0;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
   text-wrap: balance;
   color: var(--ink);
 }
 .clarity-title em { font-style: italic; color: var(--accent); }
+.clarity-lead {
+  font-family: var(--display); font-style: normal;
+  font-size: clamp(20px, 2vw, 26px); line-height: 1.1;
+  color: var(--accent); margin: 0;
+}
 /* Subtitle break: off by default (desktop/tablet wrap naturally), forced
    on phones so the heading is reliably three lines. */
 .cs-sub-break { display: none; }
@@ -3352,6 +3408,11 @@ body.subpage .foot-lens-static {
   color: var(--ink-2);
   text-wrap: balance;
   max-width: 920px;
+}
+.clarity-teaser-pitch b {
+  font-style: normal;
+  font-weight: 400;
+  color: var(--accent);
 }
 .clarity-more {
   display: inline-flex;
