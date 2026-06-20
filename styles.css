@@ -3546,7 +3546,12 @@ body.subpage .foot-lens-static {
   .ts.lg blockquote,
   .ts.md blockquote,
   .ts.sm blockquote { font-size: 22px; line-height: 1.25; }
-  .ts-body { display: none; }          /* supplementary; hide in the rail */
+  /* show the full supporting paragraph on the rail too (parity with
+     desktop). Cards already stretch to equal height; anchoring the
+     attribution to the foot keeps every footer aligned despite copy of
+     differing length, so it reads as intentional rather than ragged. */
+  .ts-grid .ts-body { display: block; }
+  .ts-grid .ts-head { margin-top: auto; }
   /* no hover-dimming on touch */
   .ts-grid:has(.ts:hover) .ts:not(:hover) { opacity: 1; }
 

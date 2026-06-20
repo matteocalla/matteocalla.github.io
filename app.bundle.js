@@ -633,28 +633,28 @@ function Sparkle({
 }
 const DEFAULT_POS = {
   "cat-mag": {
-    dx: -495,
-    dy: -10
+    dx: -492,
+    dy: -11
   },
   "appr-sprout": {
     dx: -493,
     dy: -29
   },
   "svc-diamond": {
-    dx: -484,
-    dy: -190
+    dx: -485,
+    dy: -158
   },
   "svc-catalog": {
-    dx: -494,
-    dy: 519
+    dx: -488,
+    dy: 574
   },
   "ts-ear": {
-    dx: -488,
-    dy: -17
+    dx: -485,
+    dy: -18
   },
   "cta-env": {
-    dx: -501,
-    dy: 10
+    dx: -484,
+    dy: 6
   },
   "foot-lens": {
     dx: -90,
@@ -681,12 +681,12 @@ const TABLET_POS = {
     dy: 94
   },
   "svc-diamond": {
-    dx: -281,
-    dy: 75
+    dx: -282,
+    dy: 103
   },
   "svc-catalog": {
-    dx: -278,
-    dy: 379
+    dx: -288,
+    dy: 441
   },
   "ts-ear": {
     dx: -282,
@@ -711,19 +711,19 @@ const MOBILE_POS = {
     dy: 92
   },
   "svc-diamond": {
-    dx: 273,
-    dy: 105
+    dx: 264,
+    dy: 135
   },
   "svc-catalog": {
-    dx: -55,
-    dy: 479
+    dx: -62,
+    dy: 542
   },
   "ts-ear": {
-    dx: -54,
-    dy: 101
+    dx: -61,
+    dy: 100
   },
   "cta-env": {
-    dx: -52,
+    dx: -58,
     dy: 114
   },
   "foot-lens": {
@@ -1831,7 +1831,9 @@ function ClaritySessions({
     className: "clarity-head"
   }, React.createElement("div", {
     className: "clarity-kicker"
-  }, data.sectionKicker), React.createElement("h3", {
+  }, data.sectionKicker), React.createElement("div", {
+    className: "clarity-lead"
+  }, "My Signature Offering"), React.createElement("h3", {
     className: "clarity-title"
   }, data.title, React.createElement("br", null), React.createElement("em", null, (() => {
     const w = String(data.subtitle).trim().split(/\s+/);
@@ -1842,8 +1844,11 @@ function ClaritySessions({
   })())), React.createElement("div", {
     className: "clarity-format"
   }, data.format)), React.createElement("p", {
-    className: "clarity-teaser-pitch"
-  }, data.teaserPitch), React.createElement("a", {
+    className: "clarity-teaser-pitch",
+    dangerouslySetInnerHTML: {
+      __html: data.teaserPitch
+    }
+  }), React.createElement("a", {
     className: "clarity-more",
     href: data.pageUrl
   }, data.ctaLabel, " ", React.createElement("span", {
@@ -1879,18 +1884,18 @@ function ServicesList({
     data: data.flagship
   }), React.createElement("div", {
     className: "svc-head svc-head--index"
-  }, React.createElement("div", null), React.createElement("div", null, React.createElement("h2", {
-    className: "sec-title"
-  }, "An ", React.createElement("span", {
+  }, React.createElement("div", null), React.createElement("div", null, React.createElement("div", {
+    className: "clarity-kicker",
     style: {
-      color: "#171513",
-      fontStyle: "normal"
+      marginBottom: "16px"
     }
-  }, "index of"), React.createElement("br", null), React.createElement("em", {
+  }, "\u2116 04b / SERVICES"), React.createElement("h2", {
+    className: "sec-title"
+  }, "A Complete Index", React.createElement("br", null), React.createElement("em", {
     style: {
       color: "#5D2A2A"
     }
-  }, "services.")), React.createElement("p", {
+  }, "of Services.")), React.createElement("p", {
     className: "svc-sub",
     dangerouslySetInnerHTML: {
       __html: data.subhead
@@ -2160,7 +2165,17 @@ function CTA({
     style: {
       color: "rgb(201, 122, 85)"
     }
-  }, data.email))))));
+  }, data.email), React.createElement("a", {
+    className: "cta-li",
+    href: "https://www.linkedin.com/in/matteocalla/",
+    target: "_blank",
+    rel: "noopener"
+  }, "Connect on LinkedIn", React.createElement("svg", {
+    viewBox: "0 0 448 512",
+    "aria-hidden": "true"
+  }, React.createElement("path", {
+    d: "M100.28 448H7.4V148.9h92.88V448zM53.79 108.1C24.09 108.1 0 83.5 0 53.8a53.79 53.79 0 0 1 107.58 0c0 29.7-24.1 54.3-53.79 54.3zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.69-48.3 87.88-48.3 94 0 111.28 61.9 111.28 142.3V448z"
+  }))))))));
 }
 function Footer() {
   return React.createElement("footer", {
@@ -2174,7 +2189,18 @@ function Footer() {
     href: "impressum.html"
   }, "Impressum"), " \xB7 ", React.createElement("a", {
     href: "datenschutz.html"
-  }, "Datenschutz"))));
+  }, "Datenschutz"), " \xB7 ", React.createElement("a", {
+    className: "foot-li",
+    href: "https://www.linkedin.com/in/matteocalla/",
+    target: "_blank",
+    rel: "noopener",
+    "aria-label": "LinkedIn"
+  }, React.createElement("svg", {
+    viewBox: "0 0 448 512",
+    "aria-hidden": "true"
+  }, React.createElement("path", {
+    d: "M100.28 448H7.4V148.9h92.88V448zM53.79 108.1C24.09 108.1 0 83.5 0 53.8a53.79 53.79 0 0 1 107.58 0c0 29.7-24.1 54.3-53.79 54.3zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.69-48.3 87.88-48.3 94 0 111.28 61.9 111.28 142.3V448z"
+  }))))));
 }
 function Tweaks({
   t,
