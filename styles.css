@@ -2607,10 +2607,11 @@ body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
   letter-spacing: -0.005em;
   margin-top: 8px;
   align-self: flex-start;
-  transition: background .15s;
+  transition: background .15s, color .15s;
 }
-.ctaA-btn:hover { background: #2B2620; color: var(--paper); }
-.ctaA-btn .arr { font-family: var(--mono); font-style: normal; font-size: 14px; }
+.ctaA-btn:hover { background: var(--accent); color: var(--paper); }
+.ctaA-btn .arr { font-family: var(--mono); font-style: normal; font-size: 14px; transition: transform .2s ease; }
+.ctaA-btn:hover .arr { transform: translateX(4px); }
 .ctaA-meta {
   margin-top: 8px;
   padding-top: 18px;
