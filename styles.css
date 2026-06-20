@@ -867,18 +867,20 @@ body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
   gap: 12px;
   margin-top: 12px;
   padding: 14px 22px 16px;
-  border: 1px solid var(--ink);
+  border: 1px solid var(--accent);
   border-radius: 999px;
   font-family: var(--mono);
   font-size: 12px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--ink);
+  background: var(--accent);
+  color: var(--paper);
   text-decoration: none;
-  transition: background .15s, color .15s;
+  transition: background .15s, color .15s, border-color .15s;
 }
 .sp-flagship-cta:hover {
   background: var(--ink);
+  border-color: var(--ink);
   color: var(--paper);
 }
 .sp-flagship-cta .arr {
