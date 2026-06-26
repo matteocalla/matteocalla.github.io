@@ -29,7 +29,7 @@
   text-wrap: pretty;
 }
 .cs-coda {
-  color: var(--accent);
+  color: var(--ink);
   font-style: italic;
   font-weight: 500;
 }
@@ -73,7 +73,6 @@
 .cs-who .sp-flagship-format {
   font-size: 11px;
   margin-top: 20px;
-  color: var(--margin);
 }
 .cs-who li em {
   font-family: var(--serif);
@@ -172,7 +171,7 @@
 }
 .cs-involves .cs-b {
   flex: none;
-  color: var(--accent);
+  color: var(--ink);
   font-size: 0.68em;
 }
 

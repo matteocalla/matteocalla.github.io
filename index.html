@@ -34,34 +34,36 @@
        offsets the old React app applied via JS now live here as CSS. The
        at-rest tilt (--rot) and edge anchor (top/right) still come from the
        .marginalia-* rules in styles.css; these only set the translate. */
-    .marginalia-cat-mag     { --dx: -492px; --dy: -11px; }
-    .marginalia-appr-sprout { --dx: -493px; --dy: -29px; }
-    .marginalia-svc-diamond { --dx: -485px; --dy: -158px; }
-    .marginalia-svc-cabinet { --dx: -488px; --dy: 574px; }
-    .marginalia-ts-ear      { --dx: -485px; --dy: -18px; }
-    .marginalia-cta-env     { --dx: -484px; --dy: 6px; }
-    .marginalia-foot-lens   { --dx: -90px;  --dy: -52px; }
+    /* MARGINALIA-OFFSETS-START */
+    .marginalia-cat-mag     { --dx: -522px; --dy: -46px; }
+    .marginalia-appr-sprout { --dx: -521px; --dy: -45px; }
+    .marginalia-svc-diamond { --dx: -520px; --dy: -179px; }
+    .marginalia-svc-cabinet { --dx: -533px; --dy: 521px; }
+    .marginalia-ts-ear      { --dx: -520px; --dy: -51px; }
+    .marginalia-cta-env     { --dx: -517px; --dy: -28px; }
+    .marginalia-foot-lens   { --dx: -90px; --dy: -52px; }
     @media (min-width: 561px) and (max-width: 880px) {
-      .marginalia-cat-mag     { --dx: -285px; --dy: 106px; }
-      .marginalia-appr-sprout { --dx: -284px; --dy: 94px; }
-      .marginalia-svc-diamond { --dx: -282px; --dy: 103px; }
-      .marginalia-svc-cabinet { --dx: -288px; --dy: 441px; }
-      .marginalia-ts-ear      { --dx: -282px; --dy: 100px; }
-      .marginalia-cta-env     { --dx: -280px; --dy: 117px; }
-      .marginalia-foot-lens   { --dx: 136px;  --dy: -82px; }
+      .marginalia-cat-mag     { --dx: -287px; --dy: 65px; }
+      .marginalia-appr-sprout { --dx: -284px; --dy: 69px; }
+      .marginalia-svc-diamond { --dx: -287px; --dy: 80px; }
+      .marginalia-svc-cabinet { --dx: -293px; --dy: 384px; }
+      .marginalia-ts-ear      { --dx: -288px; --dy: 58px; }
+      .marginalia-cta-env     { --dx: -293px; --dy: 77px; }
+      .marginalia-foot-lens   { --dx: 136px; --dy: -82px; }
     }
     @media (max-width: 560px) {
-      .marginalia-cat-mag     { --dx: -58px; --dy: 105px; }
-      .marginalia-appr-sprout { --dx: -56px; --dy: 92px; }
-      .marginalia-svc-diamond { --dx: 264px; --dy: 135px; }
-      .marginalia-svc-cabinet { --dx: -62px; --dy: 542px; }
-      .marginalia-ts-ear      { --dx: -61px; --dy: 100px; }
-      .marginalia-cta-env     { --dx: -58px; --dy: 114px; }
+      .marginalia-cat-mag     { --dx: -58px; --dy: 63px; }
+      .marginalia-appr-sprout { --dx: -57px; --dy: 64px; }
+      .marginalia-svc-diamond { --dx: 266px; --dy: 108px; }
+      .marginalia-svc-cabinet { --dx: -64px; --dy: 479px; }
+      .marginalia-ts-ear      { --dx: -65px; --dy: 62px; }
+      .marginalia-cta-env     { --dx: -64px; --dy: 76px; }
       .marginalia-foot-lens   { --dx: 317px; --dy: -137px; }
     }
+    /* MARGINALIA-OFFSETS-END */
   </style>
 </head>
-<body style="--whimsy: 0.6; --ill-fill: #E2B23A; --ill-ink: var(--ink);">
+<body class="home" style="--whimsy: 0.6; --ill-fill: #C5A059; --ill-ink: var(--ink);">
 
   <!-- ─── NAV / MASTHEAD ─── -->
   <nav class="nav">
@@ -86,23 +88,20 @@
   <header class="hero" data-screen-label="Hero">
     <div class="container">
       <div class="hero-eyebrow">
-        <span>№ 001 — PRACTICE</span>
         <span>Est. 2025</span>
         <span class="he-rule" aria-hidden="true"></span>
-        <span class="he-vol">Vol. VII · Berlin</span>
+        <span class="he-vol">Berlin</span>
       </div>
       <div class="hero-grid">
         <div>
           <h1 class="hero-title">Clarity<br />for <em>Complex</em><br />Work.</h1>
-          <p class="hero-sub">Strategic communications for work that resists easy summary – NGOs, scale-ups, artists, and art institutions.</p>
+          <p class="hero-sub">Strategic communications for work that resists easy summary: NGOs, scale-ups, artists, and art institutions.</p>
           <div class="hero-cta-row">
             <a class="hero-feature" href="mailto:matteo@clarityforcomplexwork.com?subject=Hello%20%E2%80%94%20let%27s%20talk">
               <span class="hero-feature-title">Get in touch</span>
-              <span class="hero-feature-arrow" aria-hidden="true">→</span>
             </a>
             <a class="hero-feature hero-feature--ghost" href="on-complex-work.html">
               <span class="hero-feature-title">What is complex work?</span>
-              <span class="hero-feature-arrow" aria-hidden="true">→</span>
             </a>
           </div>
         </div>
@@ -162,7 +161,6 @@
     </div>
     <div class="container">
       <div class="sec-head">
-        <div class="sec-num">№ 02 / Catalogue</div>
         <h2 class="sec-title">A <em>catalogue</em><br />of work, in progress.</h2>
       </div>
       <p class="cat-intro dropcap">From NGOs and tech to artists and art galleries, my clients share a common problem: the complexity of their work makes it hard to reach internal clarity and an external audience. Here's a catalogue of ways I've helped.</p>
@@ -278,7 +276,6 @@
     </div>
     <div class="container">
       <div class="sec-head">
-        <div class="sec-num">№ 03 / APPROACH</div>
         <div>
           <h2 class="appr-hero">You can't <em>grow</em><br />what you don't <em>see</em>.</h2>
           <p class="appr-sub">My <em>approach</em>, in three parts.</p>
@@ -369,20 +366,18 @@
       <!-- Flagship — Clarity Sessions teaser -->
       <article class="clarity clarity--teaser">
         <header class="clarity-head">
-          <div class="clarity-kicker">№ 04a / SERVICES</div>
           <div class="clarity-lead">My Signature Offering</div>
           <h3 class="clarity-title">The Clarity Sessions<br /><em>Excavating your<br class="cs-sub-break" /> core narrative</em></h3>
           <div class="clarity-format">3–5 sessions</div>
         </header>
         <p class="clarity-teaser-pitch"><b>Coaching and advisory</b> to get at the heart of what you do, and the language to share it effectively.</p>
-        <a class="clarity-more" href="clarity-sessions.html">About the sessions <span class="clarity-more-arr">→</span></a>
+        <a class="clarity-more" href="clarity-sessions.html">About the sessions</a>
       </article>
 
       <div class="svc-head svc-head--index">
         <div></div>
         <div>
-          <div class="clarity-kicker" style="margin-bottom:16px;">№ 04b / SERVICES</div>
-          <h2 class="sec-title">A complete index<br />of <em style="color:#5D2A2A;">services</em>.</h2>
+          <h2 class="sec-title">A complete index<br />of <em>services</em>.</h2>
           <p class="svc-sub">Available <b>on a project basis</b>, <b>as a monthly retainer</b>, or <b>in a fractional senior comms role</b> — whichever fits the work.</p>
         </div>
       </div>
@@ -481,7 +476,6 @@
     </div>
     <div class="container" style="font-family:'Instrument Serif';">
       <div class="sec-head">
-        <div class="sec-num">№ 05 / Testimonials</div>
         <h2 class="sec-title">A <em>word</em> from<br />my clients.</h2>
       </div>
       <div class="ts-grid">
@@ -577,7 +571,6 @@
     </div>
     <div class="container">
       <div class="sec-head">
-        <div class="sec-num">№ 06 / Correspondence</div>
         <h2 class="sec-title">How we <em>work</em><br />together.</h2>
       </div>
       <div class="ctaA">
@@ -607,9 +600,9 @@
         <div class="ctaA-panel">
           <p class="ctaA-open">Tell me more about your work.</p>
           <p class="ctaA-invite">Book a free thirty-minute consultation.</p>
-          <a class="ctaA-btn" href="mailto:matteo@clarityforcomplexwork.com?subject=Hello%20%E2%80%94%20let%27s%20talk">Get in touch <span class="arr">→</span></a>
+          <a class="ctaA-btn" href="mailto:matteo@clarityforcomplexwork.com?subject=Hello%20%E2%80%94%20let%27s%20talk">Get in touch</a>
           <div class="ctaA-meta">
-            <span style="color:rgb(201, 122, 85);">matteo@clarityforcomplexwork.com</span>
+            <span>matteo@clarityforcomplexwork.com</span>
             <a class="cta-li" href="https://www.linkedin.com/in/matteocalla/" target="_blank" rel="noopener">Connect on Linked<span class="li-mark">in</span></a>
           </div>
         </div>

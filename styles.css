@@ -12,8 +12,9 @@
   --ink-2: #413F3D;
   --margin: #7F7E7D;
   --rule: #DCD7CA;
-  --accent: #5D2A2A;
-  --accent-soft: #7A5050;
+  --accent: #B71C1C;
+  --accent-soft: #9E2020;
+  --gold: #C5A059;
 
   /* Type — home page's runtime default is Instrument Serif via
      applyFont(), so we use the same stack here. Body prose uses a
@@ -65,7 +66,7 @@ body {
 }
 
 a { color: var(--ink); text-decoration: none; }
-a:hover { color: var(--accent); }
+a:hover { color: var(--gold); }
 
 img { max-width: 100%; display: block; }
 
@@ -821,8 +822,8 @@ body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
   background: var(--paper-2);
   color: var(--ink);
   padding: clamp(44px, 5vw, 68px) 0;
-  border-top: 1px solid var(--ink);
-  border-bottom: 1px solid var(--ink);
+  border-top: 0;
+  border-bottom: 1px solid var(--rule);
 }
 .sp-flagship-eyebrow {
   color: var(--ink);
@@ -867,21 +868,21 @@ body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
   gap: 12px;
   margin-top: 12px;
   padding: 14px 22px 16px;
-  border: 1px solid var(--accent);
+  border: 1px solid var(--gold);
   border-radius: 999px;
   font-family: var(--mono);
   font-size: 12px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  background: var(--accent);
-  color: var(--paper);
+  background: var(--gold);
+  color: var(--ink);
   text-decoration: none;
   transition: background .15s, color .15s, border-color .15s;
 }
 .sp-flagship-cta:hover {
   background: var(--ink);
   border-color: var(--ink);
-  color: var(--paper);
+  color: var(--gold);
 }
 .sp-flagship-cta .arr {
   font-style: normal;
@@ -928,7 +929,7 @@ body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
   position: absolute;
   left: 0;
   top: 0.3em;
-  color: var(--accent);
+  color: var(--gold);
   font-style: normal;
   font-size: 0.72em;
 }
@@ -941,6 +942,8 @@ body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
   color: var(--ink);
 }
 .sp-flagship-format span { color: var(--ink); opacity: 1; }
+body.subpage .sp-flagship-format,
+body.subpage .sp-flagship-format span { color: var(--ink); opacity: 1; }
 
 @media (max-width: 820px) {
   .sp-flagship-grid { grid-template-columns: 1fr; }
@@ -978,7 +981,7 @@ body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
   color: var(--paper);
   text-wrap: balance;
 }
-.sp-cta-line em { color: #C97A55; font-style: italic; }
+.sp-cta-line em { color: #B71C1C; font-style: italic; }
 .sp-cta-sub {
   font-family: var(--display);
   font-style: italic;
@@ -1008,7 +1011,8 @@ body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
   font-family: var(--mono);
   font-size: 11px;
   letter-spacing: 0.16em;
-  color: #C97A55;
+  text-transform: uppercase;
+  color: var(--gold);
 }
 
 @media (max-width: 880px) {
@@ -1109,8 +1113,8 @@ body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
   text-wrap: balance;
 }
 .hero-title em {
-  font-style: italic;
-  color: var(--accent);
+  font-style: normal;
+  color: inherit;
 }
 .hero-byline {
   margin: 0 0 28px;
@@ -1290,7 +1294,7 @@ body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
   font-size: 11px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--ink);
 }
 
 /* Hero CTA row — primary "Get in touch" pill paired with ghost
@@ -1316,14 +1320,17 @@ body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
   color: var(--ink);
 }
 .hero-cta-row .hero-feature--ghost .hero-feature-arrow {
-  color: var(--accent);
+  color: var(--ink);
 }
 .hero-cta-row .hero-feature--ghost:hover {
   background: var(--ink);
   border-color: var(--ink);
 }
 .hero-cta-row .hero-feature--ghost:hover .hero-feature-title {
-  color: var(--paper);
+  color: var(--gold);
+}
+.hero-cta-row .hero-feature--ghost:hover .hero-feature-arrow {
+  color: var(--gold);
 }
 
 /* Phone: keep the two hero CTAs side-by-side instead of wrapping to a
@@ -1356,6 +1363,13 @@ body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
   }
   /* push the masthead tag onto its own second line so the row isn't jammed */
   .hero-eyebrow .he-vol { flex-basis: 100%; }
+
+  /* HOME eyebrow keeps the desktop one-line layout on mobile: "Est. 2025"
+     left, the rule in the middle, "Vol. VIII · Berlin" right. */
+  body.home .hero-eyebrow { flex-wrap: nowrap; gap: 14px; }
+  body.home .hero-eyebrow .he-rule { display: block; flex: 1; }
+  body.home .hero-eyebrow > span:nth-child(2)::before { content: none; }
+  body.home .hero-eyebrow .he-vol { flex-basis: auto; }
 
   /* "What is complex work" subpage: the top eyebrow line should read just
      "Field Notes" on mobile — drop the № prefix and the "I." numeral. */
@@ -1585,11 +1599,12 @@ body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
   margin-bottom: 0;
 }
 .sec-num {
-  font-family: var(--mono);
-  font-size: 11.5px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--margin);
+  font-family: var(--serif);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink-2);
   margin: 0 0 22px;
 }
 .sec-title {
@@ -1601,7 +1616,7 @@ body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
   margin: 0;
   text-wrap: balance;
 }
-.sec-title em { font-style: italic; color: var(--accent); }
+.sec-title em { font-style: normal; color: inherit; }
 
 @media (max-width: 720px) {
   /* .sec-head already block-stacks across all breakpoints */
@@ -2049,7 +2064,7 @@ body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
   margin: 0 0 18px;
   text-wrap: balance;
 }
-.svc-head .sec-title em { font-style: italic; color: var(--accent); }
+.svc-head .sec-title em { font-style: normal; color: inherit; }
 .svc-sub {
   font-family: var(--display);
   font-style: italic;
@@ -2191,12 +2206,14 @@ body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
    gutters), never running edge-to-edge of the viewport. */
 .section--catalogue,
 .section--approach,
-.section--services {
+.section--services,
+.section--testimonials {
   position: relative;
 }
 .section--catalogue::after,
 .section--approach::after,
-.section--services::after {
+.section--services::after,
+.section--testimonials::after {
   content: "";
   position: absolute;
   left: 50%;
@@ -2213,6 +2230,7 @@ body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
 .section--approach { border-bottom: 0; }
 .section--services { border-bottom: 0; }
 #services.section { border-bottom: 0; }
+.section--testimonials { border-bottom: 0; }
 
 /* Drop the old per-grid services divider — services now uses the
    shared section-level ::after. */
@@ -2299,12 +2317,14 @@ body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
   font-size: 11px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--paper);
-  background: var(--accent);
+  color: var(--ink);
+  background: var(--gold);
   padding: 13px 20px;
   text-decoration: none;
   border-radius: 2px;
+  transition: background .15s, color .15s;
 }
+.svc-m-cta:hover { background: var(--ink); color: var(--gold); }
 .svc-m-cta span { transition: transform .2s ease; }
 .svc-m-cta:hover span { transform: translateX(3px); }
 
@@ -2320,7 +2340,7 @@ body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
   transition: border-color .18s ease;
 }
 .svc-m-card:last-child { margin-bottom: 0; }
-.svc-m-card:hover { border-color: var(--accent); }
+.svc-m-card:hover { border-color: var(--gold); }
 .svc-m-card-head {
   display: flex;
   align-items: baseline;
@@ -2438,8 +2458,8 @@ body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
   font-style: italic;
   font-size: 1.2em;
   line-height: 0.4;
-  color: var(--accent);
-  opacity: 0.7;
+  color: var(--gold);
+  opacity: 0.9;
   margin-bottom: 0.15em;
 }
 .ts blockquote em { font-style: normal; color: var(--accent); }
@@ -2523,7 +2543,7 @@ body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
 }
 .section--cta .sec-num { color: rgba(250,244,230,0.55); }
 .section--cta .sec-title { color: var(--paper); }
-.section--cta .sec-title em { color: #C97A55; }
+.section--cta .sec-title em { color: inherit; font-style: normal; }
 
 .ctaA {
   display: grid;
@@ -2546,7 +2566,7 @@ body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
   font-style: italic;
   font-size: 36px;
   line-height: 1;
-  color: #C97A55;
+  color: #B71C1C;
 }
 .ctaA-t {
   font-family: var(--display);
@@ -2555,7 +2575,7 @@ body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
   font-size: clamp(24px, 2.6vw, 30px);
   line-height: 1.1;
   letter-spacing: -0.005em;
-  color: #C97A55;
+  color: #B71C1C;
   margin: 0 0 8px;
 }
 .ctaA-b {
@@ -2598,7 +2618,7 @@ body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
   align-items: center;
   gap: 12px;
   background: var(--ink);
-  color: var(--paper);
+  color: var(--accent);
   font-family: var(--display);
   font-style: italic;
   font-size: 22px;
@@ -2609,7 +2629,7 @@ body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
   align-self: flex-start;
   transition: background .15s, color .15s;
 }
-.ctaA-btn:hover { background: var(--accent); color: var(--paper); }
+.ctaA-btn:hover { background: var(--gold); color: var(--ink); }
 .ctaA-btn .arr { font-family: var(--mono); font-style: normal; font-size: 14px; transition: transform .2s ease; }
 .ctaA-btn:hover .arr { transform: translateX(4px); }
 .ctaA-meta {
@@ -2623,13 +2643,13 @@ body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
   font-size: 10.5px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #C97A55;
+  color: #B71C1C;
 }
 /* LinkedIn link in the contact CTA — tan mono with the "in" glyph, shown
    under the email on the homepage and subpage CTAs. More prominent than the
    footer link, since this is the act-of-reaching-out zone. */
 .cta-li {
-  --li-col: #C97A55;
+  --li-col: #B71C1C;
   color: var(--li-col);
   text-decoration: none;
   font-family: var(--mono);
@@ -2895,7 +2915,7 @@ body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
    the footer's Impressum / Datenschutz links. */
 body.subpage .foot-lens-static {
   --ill-ink: var(--ink);
-  --ill-fill: #E2B23A;
+  --ill-fill: #C5A059;
   --dx: -90px;
   --dy: -52px;
   pointer-events: none;
@@ -3197,10 +3217,11 @@ body.subpage .foot-lens-static {
 /* Header: kicker + title */
 .clarity-head { display: flex; flex-direction: column; gap: 14px; margin-bottom: 36px; }
 .clarity-kicker {
-  font-family: var(--mono);
-  font-size: 11.5px; letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--margin);
+  font-family: var(--serif);
+  font-size: 13px; letter-spacing: 0;
+  text-transform: none;
+  font-weight: 600;
+  color: var(--ink-2);
 }
 /* §04 role boxes — a small filled oxblood label above each block's title
    (The Core Offering / The Complete Index) so the section's two parts are
@@ -3425,13 +3446,14 @@ body.subpage .foot-lens-static {
   font-family: var(--mono);
   font-size: 11.5px; letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--paper);
-  background: var(--ink);
+  white-space: nowrap;
+  color: var(--ink);
+  background: var(--gold);
   text-decoration: none;
   border-radius: 2px;
   transition: background 180ms ease, transform 180ms ease;
 }
-.clarity-more:hover { background: var(--accent); transform: translateX(2px); }
+.clarity-more:hover { background: var(--ink); color: var(--gold); transform: translateX(2px); }
 .clarity-more-arr {
   font-family: var(--display);
   font-size: 18px;
@@ -3462,18 +3484,26 @@ body.subpage .foot-lens-static {
   font-weight: 400;
   font-size: clamp(18px, 1.6vw, 22px);
   line-height: 1.1;
-  color: var(--paper);
+  white-space: nowrap;
+  color: var(--gold);
+  transition: color 180ms ease;
 }
 .hero-feature-arrow {
   font-family: var(--display);
   font-style: italic;
   font-size: clamp(16px, 1.4vw, 20px);
-  color: #C97A55;
-  transition: transform 220ms ease;
+  color: var(--gold);
+  transition: transform 220ms ease, color 180ms ease;
 }
 .hero-feature:hover .hero-feature-arrow {
   transform: translateX(6px);
 }
+/* Solid black hero CTA matches the master .ctaA-btn: gold-on-ink at
+   rest, flips to ink-on-gold on hover. The ghost variant keeps its
+   own outline behaviour. */
+.hero-feature:not(.hero-feature--ghost):hover { background: var(--gold); }
+.hero-feature:not(.hero-feature--ghost):hover .hero-feature-title,
+.hero-feature:not(.hero-feature--ghost):hover .hero-feature-arrow { color: var(--ink); }
 
 /* ─── MOBILE / TABLET: horizontal swipe rails (≤880px) ─────────────────
    On narrow screens the Catalogue (6 work entries) and Testimonials
@@ -3571,3 +3601,213 @@ body.subpage .foot-lens-static {
   }
   .rail-hint span { color: var(--accent); }
 }
+
+/* ───────────────────────────────────────────────────────────────
+   DE-CLAUDE · HOMEPAGE PASS — scoped to body.home so the subpages,
+   which still carry the old № / oxblood-italic pattern, stay untouched
+   until their own pass. Two moves:
+     1. Everything roman — "just to see it". Reversible: delete this block.
+     2. Hero metadata strip set in the body sans, sentence case (first
+        letter cap only — no tracked monoblock caps), grey, flanked by a
+        light rule. Reads as a quiet folio, not a kicker.
+   ─────────────────────────────────────────────────────────────── */
+body.home,
+body.home * { font-style: normal; }
+body.home .dropcap::first-letter,
+body.home .cred-section .dropcap::first-letter { font-style: normal; }
+body.home .m-row-head .m-label,
+body.home .m-col-head .m-label { font-style: normal; }
+
+body.home .hero-eyebrow {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 17px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+body.home .hero-eyebrow .he-rule { background: var(--rule); }
+body.home .hero-eyebrow .he-vol { white-space: nowrap; display: inline-flex; align-items: center; gap: 0.55em; }
+body.home .hero-eyebrow .hv-dot { width: 3px; height: 3px; border-radius: 50%; background: currentColor; flex: 0 0 auto; }
+
+/* ───────────────────────────────────────────────────────────────
+   DE-CLAUDE · SUBPAGE PASS — scoped to body.subpage, mirroring the
+   homepage pass. Four moves, all reversible (delete this block):
+     1. Everything roman.
+     2. Oxblood highlights neutralised — the coloured emphasis words,
+        drop-caps, ledes and pull-quotes go to ink (or paper on the dark
+        CTA). The accent survives only on interactive things (links,
+        buttons, hover) — those aren't "highlights".
+     3. Hero eyebrow becomes the Instrument-Serif folio like the homepage
+        (the № / roman-numeral on the left are stripped in the HTML).
+     4. Section markers de-monoblocked: set in Instrument Serif, roman,
+        sentence case, no tracking, quiet grey — not tracked mono caps.
+   ─────────────────────────────────────────────────────────────── */
+body.subpage,
+body.subpage * { font-style: normal; }
+body.subpage .sp-prose .dropcap::first-letter { font-style: normal; }
+/* roman holdouts: base sheet sets these italic with two-class selectors
+   (0,2,0) that outrank the blanket rule — match specificity to win */
+body.subpage .sp-prose .sp-prose-lede,
+body.subpage .sp-prose .sp-prose-coda,
+body.subpage .sp-svc-label .sp-svc-name { font-style: normal; }
+
+/* 2 — de-oxblood the content highlights (light sections → ink) */
+body.subpage .sp-title em,
+body.subpage .sp-section-title em,
+body.subpage .sp-flagship-title em,
+body.subpage .sp-case-quote blockquote p em,
+body.subpage .sp-prose-lede,
+body.subpage .sp-prose-coda,
+body.subpage .sp-prose .dropcap::first-letter,
+body.subpage .essay-pull blockquote { color: var(--ink); }
+/* dark CTA hook: whole headline in gold (not two-tone) — the hook reads
+   as one gold phrase, tying into the gold email/LinkedIn/button thread. */
+body.subpage .sp-cta-line,
+body.subpage .sp-cta-line em { color: var(--gold); }
+
+/* 3 — hero eyebrow → Instrument-Serif folio (matches homepage) */
+body.subpage .sp-hero .hero-eyebrow {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 17px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+body.subpage .sp-hero .hero-eyebrow .he-rule { background: var(--rule); }
+body.subpage .sp-hero .hero-eyebrow .he-vol { color: var(--margin); white-space: nowrap; }
+
+/* 4 — section markers off monoblock → Instrument Serif, quiet grey.
+   Light-section markers: */
+body.subpage .essay-way-label,
+body.subpage .essay-way-num,
+body.subpage .sp-svc-num,
+body.subpage .sp-case-year,
+body.subpage .sp-case-deliv,
+body.subpage .sp-flagship-aside-label {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 17px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink);
+}
+/* Section-title markers — on the vertical subpages the eyebrow IS the
+   section's title (there's no separate heading below it), so give it real
+   presence (option B): larger Instrument Serif. Same for the dark CTA. */
+body.subpage .sp-section-eyebrow {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(24px, 2.4vw, 30px);
+  line-height: 1.05;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink);
+  margin: 0 0 clamp(14px, 1.6vw, 20px);
+}
+/* dark CTA eyebrow: same larger serif, keep its on-dark colour + rule */
+body.subpage .sp-cta-eyebrow {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(24px, 2.4vw, 30px);
+  line-height: 1.05;
+  letter-spacing: 0;
+  text-transform: none;
+}
+/* drop the right column to start level with “Correspondence” (which sits
+   below a 1px rule + 14px pad), so the two columns top-align */
+body.subpage .sp-cta-body { padding-top: 15px; }
+/* essay (on-complex-work) section headings: set in the body sans, bold —
+   reads as a structural beat of the same voice, not an ornament. */
+body.subpage .essay-part {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 17px;
+  letter-spacing: -0.01em;
+  text-transform: none;
+  color: var(--ink);
+}
+/* clarity-sessions "Together we will:" — a small lead-in to the checklist,
+   not a big section title; match the essay-heading treatment (bold sans,
+   body size) and override the large .sp-section-eyebrow sizing. */
+body.subpage .sp-section-eyebrow.cs-together {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 17px;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  text-transform: none;
+  color: var(--ink);
+}
+
+/* ───────────────────────────────────────────────────────────────
+   RED PARED BACK — the light editorial sections carry no red. Rebinding
+   --accent to ink inside catalogue, approach, and services (which holds
+   both "My Signature Offering" and the services index) returns every
+   former-oxblood accent in them to black in one move. Hovers use --gold,
+   so interaction colour is unaffected; red now lives only on the dark CTA
+   and other truly sparse spots. Reversible: delete this block.
+   ─────────────────────────────────────────────────────────────── */
+.section--catalogue,
+.section--approach,
+.section--testimonials,
+.section--services { --accent: var(--ink); }
+
+/* ───────────────────────────────────────────────────────────────
+   DARK CTA → GOLD, not red. On the black "how we work together" panel
+   (and every subpage .sp-cta) the accent text — button words + arrow,
+   email, LinkedIn, any former-red glyphs — reads gold. Rebinding --accent
+   covers the var-based ones; the !important line beats the hard-coded
+   reds + the email's inline colour. ─────────────────────────────────── */
+.section--cta,
+.sp-cta { --accent: var(--gold); }
+.section--cta .ctaA-num,
+.section--cta .ctaA-t,
+.sp-cta .cta-li { color: var(--gold) !important; }
+.section--cta .ctaA-b { color: var(--paper); }
+.section--cta .ctaA-invite { color: var(--ink); }
+/* homepage CTA contact block sits on the LIGHT card → ink for contrast */
+.section--cta .ctaA-meta,
+.section--cta .ctaA-meta span,
+.section--cta .cta-li { color: var(--ink) !important; }
+.section--cta .cta-li { --li-col: var(--ink) !important; }
+/* LinkedIn "in" badge on the light homepage card → gold fill, black
+   outline + black glyph (the filled-ink badge read as a dark blob) */
+.section--cta .cta-li .li-mark {
+  background: var(--ink);
+  color: var(--gold) !important;
+  border: 1px solid var(--ink);
+  padding: 0.18em 0.24em;
+}
+.section--cta .cta-li:hover .li-mark { background: var(--gold); color: var(--ink) !important; }
+.sp-cta .cta-li { --li-col: var(--gold) !important; }
+
+/* SERVICES MATRIX — try the corner fleuron + the "Read more →" links and
+   arrows in gold, the lone accent in this otherwise all-ink section. */
+.section--services .m-corner::before { color: var(--gold); opacity: 0.85; }
+/* keep the gold corner fleuron lit even while the grid dims on hover
+   (row / col / cell modes all dim the corner otherwise) */
+.section--services .m-grid[data-mode] .m-corner { opacity: 1 !important; }
+.section--services .m-col-head:hover .m-col-more,
+.section--services .m-col-head.is-hover .m-col-more { color: var(--gold) !important; text-decoration: underline; text-decoration-color: var(--ink) !important; text-decoration-thickness: 1px; text-underline-offset: 0.3em; }
+.section--services .m-col-head:hover .m-col-arr,
+.section--services .m-col-head.is-hover .m-col-arr { color: var(--gold) !important; }
+
+/* ───────────────────────────────────────────────────────────────
+   NAV — one consistent, non-coloured hover across the whole bar.
+   Was a mix: the logo hovered gold, every section link hovered red, and
+   the active item sat red. Now neutral: the hovered link is full ink while
+   its neighbours dim to grey (the spotlight already built into the bar),
+   and the active page is marked with a quiet grey underline instead of
+   colour. No red or gold in the nav — it stays calm chrome. Reversible:
+   delete this block. ───────────────────────────────────────────────── */
+.nav-links a:hover,
+.nav-personal a:hover,
+.nav-contact:hover { color: var(--ink); }
+.nav-mark:hover { color: var(--margin); }
+/* symmetric spotlight: hovering ANY nav link dims every OTHER link across
+   both groups. The old rules only dimmed forward (~ can't reach backward),
+   so hovering About Me / Contact left the section links lit. :has() on the
+   shared row fixes both directions. */
+.nav-inner:has(.nav-links a:hover, .nav-personal a:hover) .nav-links a:not(:hover),
+.nav-inner:has(.nav-links a:hover, .nav-personal a:hover) .nav-personal a:not(:hover) { color: var(--margin); }
+.nav a.is-current { color: var(--ink); }
