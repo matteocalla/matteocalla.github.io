@@ -668,7 +668,7 @@ body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
   align-items: baseline;
   padding-bottom: 12px;
   margin: 0 0 8px;
-  border-bottom: 1px solid var(--ink);
+  border-bottom: 1px solid var(--margin);
   gap: 16px;
   flex-wrap: wrap;
 }
@@ -793,8 +793,9 @@ body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
   display: block;
   font-family: var(--mono);
   font-style: normal;
-  font-size: 10.5px;
-  letter-spacing: 0.2em;
+  font-size: 13px;
+  line-height: 1.5;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--ink);
 }
@@ -1055,7 +1056,7 @@ body.subpage .sp-flagship-format span { color: var(--ink); opacity: 1; }
 
 /* ─── HERO / MASTHEAD ─── */
 .hero {
-  padding: clamp(44px, 5vw, 68px) 0;
+  padding: clamp(72px, 7.5vw, 112px) 0 clamp(44px, 5vw, 68px);
   border-bottom: 1px solid var(--ink);
   position: relative;
 }
@@ -1291,10 +1292,11 @@ body.subpage .sp-flagship-format span { color: var(--ink); opacity: 1; }
 }
 .np-role {
   font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.22em;
+  font-size: 13px;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--ink);
+  white-space: nowrap;
 }
 
 /* Hero CTA row — primary "Get in touch" pill paired with ghost
