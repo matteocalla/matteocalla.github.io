@@ -261,7 +261,7 @@ body.subpage {
    sentence. */
 .sp-hero {
   padding: clamp(44px, 5vw, 68px) 0;
-  border-bottom: 1px solid var(--rule);
+  border-bottom: 1px solid var(--ink);
 }
 .sp-hero .hero-eyebrow {
   margin-bottom: clamp(36px, 4vw, 56px);
@@ -358,7 +358,7 @@ body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
 /* SECTION — generic editorial section between hero and CTA. */
 .sp-section {
   padding: clamp(44px, 5vw, 68px) 0;
-  border-bottom: 1px solid var(--rule);
+  border-bottom: 1px solid var(--ink);
 }
 .sp-section:last-of-type { border-bottom: 0; }
 .sp-section-eyebrow {
@@ -773,7 +773,7 @@ body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
 }
 .sp-case-quote blockquote p {
   font-family: var(--display);
-  font-style: italic;
+  font-style: normal;
   font-size: clamp(22px, 2.2vw, 34px);
   line-height: 1.28;
   color: var(--ink);
@@ -823,7 +823,7 @@ body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
   color: var(--ink);
   padding: clamp(44px, 5vw, 68px) 0;
   border-top: 0;
-  border-bottom: 1px solid var(--rule);
+  border-bottom: 1px solid var(--ink);
 }
 .sp-flagship-eyebrow {
   color: var(--ink);
@@ -2528,6 +2528,26 @@ body.subpage .sp-flagship-format span { color: var(--ink); opacity: 1; }
   opacity: 0.22;
 }
 
+/* ─── TWO-UP layout (current homepage testimonials) ──────────────
+   Six clients as peers in a generous 2-col editorial grid. Cards
+   stretch to equal height per row and the attribution is pinned to
+   each card's foot (margin-top:auto), so the mono footers align in
+   a clean baseline across each row despite quotes of differing
+   length — the unevenness reads as rhythm, not ragged. Desktop only;
+   the ≤880 rail rules below still drive the mobile swipe layout. */
+@media (min-width: 881px) {
+  .ts-grid.two-up {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-flow: row;
+    gap: 60px clamp(56px, 6vw, 88px);
+    align-items: stretch;
+  }
+  .ts-grid.two-up .ts { grid-column: auto; }
+  .ts-grid.two-up .ts blockquote { font-size: clamp(22px, 2.1vw, 28px); line-height: 1.22; }
+  .ts-grid.two-up .ts-body { font-size: 15px; line-height: 1.5; }
+  .ts-grid.two-up .ts-head { margin-top: auto; }
+}
+
 @media (max-width: 880px) {
   .ts-grid { grid-template-columns: 1fr; gap: 36px; }
   .ts.lg, .ts.md, .ts.sm { grid-column: 1 / -1; }
@@ -3690,6 +3710,20 @@ body.subpage .sp-flagship-aside-label {
   letter-spacing: 0;
   text-transform: none;
   color: var(--ink);
+}
+/* Vertical-subpage flagship aside — bump the involves-label and the
+   "Format · …" meta line up to the list's reading size (they read too
+   small beside the italic list). clarity-sessions keeps its smaller
+   .cs-who treatment via its own stylesheet, loaded after this. */
+body.subpage .sp-flagship-aside-label {
+  font-size: clamp(18px, 1.5vw, 23px);
+}
+body.subpage .sp-flagship-format,
+body.subpage .sp-flagship-format span {
+  font-family: var(--display);
+  font-size: clamp(18px, 1.5vw, 23px);
+  letter-spacing: 0;
+  text-transform: none;
 }
 /* Section-title markers — on the vertical subpages the eyebrow IS the
    section's title (there's no separate heading below it), so give it real
