@@ -1683,7 +1683,7 @@ function Catalogue({
     className: "sec-head"
   }, React.createElement("div", {
     className: "sec-num"
-  }, "\u2116 02 / Catalogue"), React.createElement("h2", {
+  }, "Catalogue"), React.createElement("h2", {
     className: "sec-title"
   }, "A ", React.createElement("em", null, "catalogue"), React.createElement("br", null), "of work, in progress.")), React.createElement("p", {
     className: "cat-intro dropcap"
@@ -1787,7 +1787,7 @@ function Approach({
     className: "sec-head"
   }, React.createElement("div", {
     className: "sec-num"
-  }, "\u2116 03 / APPROACH"), React.createElement("div", null, React.createElement("h2", {
+  }, "Approach"), React.createElement("div", null, React.createElement("h2", {
     className: "appr-hero",
     dangerouslySetInnerHTML: {
       __html: data.aphorism
@@ -1851,9 +1851,7 @@ function ClaritySessions({
   }), React.createElement("a", {
     className: "clarity-more",
     href: data.pageUrl
-  }, data.ctaLabel, " ", React.createElement("span", {
-    className: "clarity-more-arr"
-  }, "\u2192")));
+  }, data.ctaLabel));
 }
 function ServicesList({
   data,
@@ -1889,13 +1887,9 @@ function ServicesList({
     style: {
       marginBottom: "16px"
     }
-  }, "\u2116 04b / SERVICES"), React.createElement("h2", {
+  }, "Services"), React.createElement("h2", {
     className: "sec-title"
-  }, "A Complete Index", React.createElement("br", null), React.createElement("em", {
-    style: {
-      color: "#5D2A2A"
-    }
-  }, "of Services.")), React.createElement("p", {
+  }, "A complete index", React.createElement("br", null), "of ", React.createElement("em", null, "services"), "."), React.createElement("p", {
     className: "svc-sub",
     dangerouslySetInnerHTML: {
       __html: data.subhead
@@ -2081,7 +2075,7 @@ function Testimonials({
     className: "sec-head"
   }, React.createElement("div", {
     className: "sec-num"
-  }, "\u2116 05 / Testimonials"), React.createElement("h2", {
+  }, "Testimonials"), React.createElement("h2", {
     className: "sec-title"
   }, "A ", React.createElement("em", null, "word"), " from", React.createElement("br", null), "my clients.")), React.createElement("div", {
     className: "ts-grid"

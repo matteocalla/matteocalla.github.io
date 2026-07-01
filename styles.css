@@ -696,9 +696,9 @@ body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
 }
 .sp-case-body {
   display: grid;
-  grid-template-columns: 1fr 1.3fr;
+  grid-template-columns: 0.8fr 1.45fr;
   gap: clamp(36px, 4.5vw, 64px);
-  align-items: start;
+  align-items: center;
   margin: 0 0 clamp(44px, 5.5vw, 72px);
 }
 .sp-case-figure {
@@ -729,7 +729,7 @@ body .sp-hero:has(> .container > .sp-hero-text) + .sp-section {
 }
 .sp-case-desc p {
   font-family: var(--serif);
-  font-size: clamp(16.5px, 1.25vw, 19px);
+  font-size: clamp(17.5px, 1.4vw, 21px);
   line-height: 1.55;
   color: var(--ink);
   margin: 0 0 1.1em;
@@ -1329,10 +1329,10 @@ body.subpage .sp-flagship-format span { color: var(--ink); opacity: 1; }
   border-color: var(--ink);
 }
 .hero-cta-row .hero-feature--ghost:hover .hero-feature-title {
-  color: var(--gold);
+  color: var(--paper);
 }
 .hero-cta-row .hero-feature--ghost:hover .hero-feature-arrow {
-  color: var(--gold);
+  color: var(--paper);
 }
 
 /* Phone: keep the two hero CTAs side-by-side instead of wrapping to a
@@ -3462,23 +3462,27 @@ body.subpage .foot-lens-static {
 }
 .clarity-more {
   display: inline-flex;
-  align-items: center;
-  gap: 14px;
-  padding: 14px 22px 14px 26px;
-  font-family: var(--mono);
-  font-size: 11.5px; letter-spacing: 0.22em;
-  text-transform: uppercase;
+  align-items: baseline;
+  gap: 12px;
+  padding: 10px 16px 12px;
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(18px, 1.6vw, 22px);
+  line-height: 1.1;
+  letter-spacing: -0.005em;
+  text-transform: none;
   white-space: nowrap;
   color: var(--ink);
   background: var(--gold);
   text-decoration: none;
-  border-radius: 2px;
-  transition: background 180ms ease, transform 180ms ease;
+  transition: background 180ms ease, color 180ms ease, transform 180ms ease;
 }
 .clarity-more:hover { background: var(--ink); color: var(--gold); transform: translateX(2px); }
 .clarity-more-arr {
   font-family: var(--display);
-  font-size: 18px;
+  font-style: italic;
+  font-size: clamp(16px, 1.4vw, 20px);
   letter-spacing: 0;
   line-height: 1;
 }
@@ -3507,22 +3511,21 @@ body.subpage .foot-lens-static {
   font-size: clamp(18px, 1.6vw, 22px);
   line-height: 1.1;
   white-space: nowrap;
-  color: var(--gold);
+  color: var(--paper);
   transition: color 180ms ease;
 }
 .hero-feature-arrow {
   font-family: var(--display);
   font-style: italic;
   font-size: clamp(16px, 1.4vw, 20px);
-  color: var(--gold);
+  color: var(--paper);
   transition: transform 220ms ease, color 180ms ease;
 }
 .hero-feature:hover .hero-feature-arrow {
   transform: translateX(6px);
 }
-/* Solid black hero CTA matches the master .ctaA-btn: gold-on-ink at
-   rest, flips to ink-on-gold on hover. The ghost variant keeps its
-   own outline behaviour. */
+/* Solid black hero CTA: beige-on-ink at rest, flips to ink-on-gold
+   on hover. The ghost variant keeps its own outline. */
 .hero-feature:not(.hero-feature--ghost):hover { background: var(--gold); }
 .hero-feature:not(.hero-feature--ghost):hover .hero-feature-title,
 .hero-feature:not(.hero-feature--ghost):hover .hero-feature-arrow { color: var(--ink); }

@@ -33,6 +33,22 @@
   font-style: italic;
   font-weight: 500;
 }
+/* Second intro paragraph tucks closer to the coda line that concludes it. */
+.cs-problem--tight {
+  margin-bottom: clamp(10px, 1.1vw, 14px);
+}
+/* The thesis coda — set on its own line as the closing beat of the intro,
+   in the accent italic so it reads as the takeaway before the steps. */
+.cs-coda-line {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(17px, 1.25vw, 19px);
+  line-height: 1.55;
+  color: var(--ink);
+  max-width: 60ch;
+  margin: 0 0 clamp(28px, 3.4vw, 44px);
+  text-wrap: pretty;
+}
 
 /* "Who They're For" sidebar — borrows the flagship-aside formatting,
    constrained to a sidebar width so it doesn't span the full column. */
