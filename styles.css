@@ -1056,7 +1056,7 @@ body.subpage .sp-flagship-format span { color: var(--ink); opacity: 1; }
 
 /* ─── HERO / MASTHEAD ─── */
 .hero {
-  padding: clamp(72px, 7.5vw, 112px) 0 clamp(44px, 5vw, 68px);
+  padding: clamp(32px, 3.4vw, 52px) 0 clamp(44px, 5vw, 68px);
   border-bottom: 1px solid var(--ink);
   position: relative;
 }
@@ -3818,7 +3818,14 @@ body.subpage .sp-section-eyebrow.cs-together {
   padding: 0.18em 0.24em;
 }
 .section--cta .cta-li:hover .li-mark { background: var(--gold); color: var(--ink) !important; }
+/* …and the "Connect on LinkedIn" words shift gold to match the badge */
+.section--cta .cta-li:hover { color: var(--gold) !important; }
 .sp-cta .cta-li { --li-col: var(--gold) !important; }
+/* Subpage CTAs are gold-on-black, so a gold hover would vanish. Lift the
+   whole link (words + badge fill) to paper/white on hover, glyph to ink —
+   a clear brighten against the black panel. */
+.sp-cta .cta-li:hover { color: var(--paper) !important; --li-col: var(--paper) !important; }
+.sp-cta .cta-li:hover .li-mark { color: var(--ink); }
 
 /* SERVICES MATRIX — try the corner fleuron + the "Read more →" links and
    arrows in gold, the lone accent in this otherwise all-ink section. */
